@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>qiuer的新闻工作台 · Daily News Workbench</title>
+<style>
+:root{
+  /* 糖果淡彩 - 参考莫兰迪配色卡，极淡极透 */
+  --bg:#FFF8F0;        /* 极浅暖米白 主背景 */
+  --bg2:#FAF1E4;       /* 略深奶米 次背景 */
+  --card:#FFFFFF;      /* 纯白 卡片 */
+  --card2:#FEFBF6;     /* 浅奶白 */
+  --accent:#B8E6D3;    /* 薄荷绿 强调色 */
+  --accent2:#9FD9C2;   /* 深一点薄荷绿 */
+  --fg:#5A4A6E;        /* 温柔深紫 主文字 */
+  --fg2:#A89DB5;       /* 浅紫灰 次文字 */
+  --hi:#FFB5A7;        /* 珊瑚粉 高亮 */
+  --hi2:#FF9B8A;       /* 深珊瑚粉 */
+  --border:#F0E8DC;    /* 浅奶米边框 */
+  --border2:#E8DDC9;   /* 略深奶米边框 */
+  --serif:'Georgia','Noto Serif SC','Songti SC','SimSun',serif;
+  --mono:'Courier New','Menlo',monospace;
+  --sans:'Helvetica Neue','PingFang SC','Microsoft YaHei',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:
+    radial-gradient(ellipse at top, #FFFDF8 0%, var(--bg) 60%, #FBF3E8 100%);
+  color:var(--fg); font-family:var(--sans); min-height:100vh;
+  padding:0;
+}
+/* 顶部纸纹质感 */
+body::before{
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(184,230,211,.025) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(255,181,167,.022) 0 1px, transparent 1px 3px);
+}
+.app{position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:24px 20px 60px}
+
+/* ===== 头部 ===== */
+header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom:20px}
+.brand{display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap}
+.brand h1{
+  font-family:var(--serif); font-size:30px; font-weight:700;
+  color:var(--fg); letter-spacing:1px; line-height:1;
+}
+.brand .en{font-family:var(--mono); font-size:11px; color:var(--hi2); letter-spacing:3px; text-transform:uppercase; margin-top:6px}
+.brand .meta{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--fg2); text-align:right}
+.brand .meta div:first-child{color:var(--hi2); font-size:14px}
+
+/* ===== 工具栏 ===== */
+.toolbar{
+  background:linear-gradient(180deg, rgba(255,255,255,.7), rgba(254,251,246,.5));
+  border:1px solid var(--border); border-radius:14px;
+  padding:14px; margin-bottom:22px;
+  display:flex; gap:12px; flex-wrap:wrap; align-items:center;
+}
+.field{display:flex; flex-direction:column; gap:4px}
+.field label{font-size:10px; color:var(--fg2); font-family:var(--mono); letter-spacing:1px; text-transform:uppercase}
+.field input[type=text], .field input[type=date], .field select{
+  background:#FFFEFB; border:1px solid var(--border2); border-radius:8px;
+  color:var(--fg); padding:8px 10px; font-size:13px; font-family:var(--sans);
+  outline:none; transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus, .field select:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,230,211,.4)}
+.field input[type=date]{color-scheme:light}
+.cat-select{min-width:140px}
+.btns{display:flex; gap:8px; margin-left:auto; flex-wrap:wrap}
+.btn{
+  background:var(--accent); color:#5A4A6E; border:1px solid var(--accent2);
+  border-radius:8px; padding:8px 14px; font-size:13px; cursor:pointer;
+  font-family:var(--sans); transition:background .15s, transform .05s;
+}
+.btn:hover{background:var(--accent2)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent; color:var(--fg); border-color:var(--border2)}
+.btn.ghost:hover{background:rgba(184,230,211,.2)}
+.btn.hi{background:var(--hi2); border-color:var(--hi2); color:#FFFFFF}
+.btn.hi:hover{background:var(--hi)}
+.cat-chips{display:flex; gap:6px; flex-wrap:wrap}
+.chip{
+  font-size:11px; padding:4px 10px; border-radius:14px; cursor:pointer;
+  background:#FFFEFB; border:1px solid var(--border2); color:var(--fg2);
+  user-select:none; transition:all .15s; font-family:var(--mono);
+}
+.chip.on{background:var(--accent); color:#5A4A6E; border-color:var(--accent2)}
+
+/* ===== 视图切换 ===== */
+.view-tabs{display:flex; gap:0; margin-bottom:18px; border-bottom:2px solid var(--border2)}
+.view-tabs button{
+  background:none; border:none; color:var(--fg2); cursor:pointer;
+  padding:10px 22px; font-size:14px; font-family:var(--serif); letter-spacing:1px;
+  border-bottom:3px solid transparent; margin-bottom:-2px; transition:all .15s;
+}
+.view-tabs button:hover{color:var(--fg)}
+.view-tabs button.active{color:var(--hi2); border-bottom-color:var(--hi2)}
+
+/* ===== 日历（前后两周横向条带）===== */
+.cal-strip{
+  display:flex; gap:8px; overflow-x:auto; padding:6px 4px 14px; margin-bottom:20px;
+  scroll-behavior:smooth;
+}
+.cal-strip::-webkit-scrollbar{height:5px}
+.cal-strip::-webkit-scrollbar-track{background:#FBF3E8; border-radius:3px}
+.cal-strip::-webkit-scrollbar-thumb{background:var(--accent); border-radius:3px}
+.cal-cell{
+  flex:0 0 auto; width:64px; padding:8px 6px; border-radius:12px; cursor:pointer;
+  background:#FFFFFF; border:1.5px solid var(--border); text-align:center;
+  position:relative; transition:all .15s;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+}
+.cal-cell:hover{border-color:var(--accent); background:linear-gradient(180deg, #FFFDF8, #F0FAF5)}
+.cal-cell .dow{font-size:10px; font-family:var(--mono); color:var(--fg2); letter-spacing:1px}
+.cal-cell .num{font-family:var(--serif); font-size:20px; font-weight:700; color:var(--fg); line-height:1}
+.cal-cell .cnt{
+  font-size:9px; font-family:var(--mono); color:#5A4A6E;
+  background:var(--accent); padding:1px 6px; border-radius:8px; margin-top:1px;
+}
+.cal-cell.today{
+  border-color:var(--hi2);
+  background:linear-gradient(180deg, #FFE9E2, #FFD9CF);
+}
+.cal-cell.today .num{color:var(--hi2)}
+.cal-cell.today .dow{color:var(--hi2)}
+.cal-cell.selected{box-shadow:0 0 0 2px var(--accent2) inset; border-color:var(--accent2)}
+.cal-cell.has-news .num::after{
+  content:""; position:absolute; top:7px; right:7px; width:5px; height:5px;
+  border-radius:50%; background:var(--hi2);
+}
+.cal-cell .dots{display:flex; gap:2px; margin-top:1px; min-height:6px}
+.cal-cell .dot{width:5px; height:5px; border-radius:50%}
+
+/* ===== 新闻列表 ===== */
+.news-panel{margin-top:8px}
+.news-head{display:flex; align-items:baseline; gap:14px; margin-bottom:18px; flex-wrap:wrap}
+.news-head h2{font-family:var(--serif); font-size:22px; color:var(--fg)}
+.news-head .date{font-family:var(--mono); font-size:13px; color:var(--hi2)}
+.news-head .sub{font-size:12px; color:var(--fg2); margin-left:auto}
+.news-list{display:flex; flex-direction:column; gap:12px}
+.news-card{
+  background:linear-gradient(180deg, var(--card), var(--card2));
+  border:1px solid var(--border); border-radius:14px;
+  padding:14px 16px; display:flex; gap:14px; position:relative;
+  transition:transform .1s, box-shadow .15s; color:var(--fg);
+}
+.news-card:hover{transform:translateY(-1px); box-shadow:0 8px 22px rgba(184,230,211,.35); border-color:var(--accent)}
+.news-card .rank{
+  font-family:var(--serif); font-size:28px; font-weight:700;
+  background:linear-gradient(135deg, var(--hi), var(--hi2));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  min-width:34px; text-align:center; line-height:1; padding-top:2px;
+}
+.news-card .body{flex:1; min-width:0}
+.news-card .title{
+  font-family:var(--serif); font-size:16px; font-weight:700; color:var(--fg);
+  line-height:1.4; margin-bottom:6px;
+}
+.news-card .title a{color:inherit; text-decoration:none}
+.news-card .title a:hover{color:var(--hi2)}
+.news-card .summary{font-size:13px; color:var(--fg2); line-height:1.6; margin-bottom:8px}
+.news-card .tags{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.news-card .tag{
+  font-size:10px; font-family:var(--mono); letter-spacing:1px;
+  background:#FAF1E4; color:var(--fg); padding:2px 8px; border-radius:10px;
+  text-transform:uppercase;
+}
+.news-card .tag.cat{background:var(--accent); color:#5A4A6E}
+.news-card .src{font-size:11px; color:var(--fg2); font-family:var(--mono)}
+.news-card .fav{
+  position:absolute; top:12px; right:14px; cursor:pointer;
+  font-size:18px; color:rgba(90,74,110,.2); background:none; border:none;
+  transition:color .15s, transform .15s; line-height:1;
+}
+.news-card .fav:hover{color:var(--hi); transform:scale(1.15)}
+.news-card .fav.on{color:var(--hi2)}
+.news-card.read{opacity:.6}
+.news-card.read .title{font-weight:400}
+
+/* 空状态 */
+.empty{
+  text-align:center; padding:50px 20px; color:var(--fg2);
+  font-family:var(--serif); font-size:16px;
+}
+.empty .icon{font-size:40px; margin-bottom:10px; opacity:.5}
+
+/* 搜索结果 */
+.result-meta{font-size:12px; color:var(--fg2); margin-bottom:14px; font-family:var(--mono)}
+.result-meta b{color:var(--hi2)}
+
+/* 底部 */
+footer{
+  margin-top:40px; padding-top:18px; border-top:1px solid var(--border2);
+  font-size:11px; color:var(--fg2); font-family:var(--mono); text-align:center;
+  letter-spacing:1px;
+}
+footer .refresh{color:var(--hi2); cursor:pointer; text-decoration:none; margin-left:8px}
+footer .refresh:hover{text-decoration:underline}
+
+/* 加载提示 */
+.toast{
+  position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+  background:#FFFFFF; border:1px solid var(--hi2); color:var(--fg);
+  padding:10px 18px; border-radius:10px; font-size:13px; z-index:100;
+  box-shadow:0 6px 18px rgba(255,181,167,.3); opacity:0; transition:opacity .25s, transform .25s;
+  pointer-events:none;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(-4px)}
+
+/* 响应式 */
+@media(max-width:680px){
+  .brand .meta{display:none}
+  .cal-cell{width:54px}
+  .cal-cell .num{font-size:17px}
+  .news-card{flex-direction:column; gap:6px}
+  .news-card .rank{font-size:22px; min-width:0; text-align:left}
+  .field{flex:1; min-width:120px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== 头部 ===== -->
+  <header>
+    <div class="brand">
+      <div>
+        <h1>qiuer的新闻工作台</h1>
+        <div class="en">QIUER'S DAILY NEWS · WORKBENCH</div>
+      </div>
+      <div class="meta">
+        <div id="todayLabel">—</div>
+        <div id="weekLabel">—</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== 工具栏 ===== -->
+  <div class="toolbar">
+    <div class="field" style="flex:2; min-width:180px">
+      <label>关键词搜索</label>
+      <input type="text" id="kwInput" placeholder="搜索标题与摘要…">
+    </div>
+    <div class="field">
+      <label>起始日期</label>
+      <input type="date" id="fromDate">
+    </div>
+    <div class="field">
+      <label>结束日期</label>
+      <input type="date" id="toDate">
+    </div>
+    <div class="field" style="flex:1; min-width:200px">
+      <label>分类筛选</label>
+      <div class="cat-chips" id="catChips"></div>
+    </div>
+    <div class="btns">
+      <button class="btn ghost" id="resetBtn">重置</button>
+      <button class="btn hi" id="searchBtn">查询</button>
+    </div>
+  </div>
+
+  <!-- ===== 视图切换 ===== -->
+  <div class="view-tabs">
+    <button data-view="calendar" class="active">日历视图</button>
+    <button data-view="search">查询结果</button>
+  </div>
+
+  <!-- ===== 日历视图 ===== -->
+  <section id="calView">
+    <div class="cal-head" style="margin-bottom:12px">
+      <div class="ym"><span class="year" id="calYear"></span><span id="calRange"></span></div>
+      <div class="cal-nav">
+        <button id="prevWeek" title="前两周">‹‹</button>
+        <button id="todayBtn" title="回到今天">今</button>
+        <button id="nextWeek" title="后两周">››</button>
+      </div>
+    </div>
+    <div class="cal-strip" id="calStrip"></div>
+
+    <!-- 当日新闻面板 -->
+    <div class="news-panel" id="newsPanel" style="margin-top:24px"></div>
+  </section>
+
+  <!-- ===== 查询结果视图 ===== -->
+  <section id="searchView" style="display:none">
+    <div class="result-meta" id="resultMeta"></div>
+    <div class="news-list" id="searchResults"></div>
+  </section>
+
+  <footer>
+    数据存于本地浏览器 · 种子数据截至 2026-07-30 · 尽力联网抓取更新
+    <a class="refresh" id="refreshBtn">↻ 立即刷新今日</a>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   种子数据：2026-07-28 ~ 2026-07-30 真实新闻精选
+   每日10条，按重要性排序
+========================================================= */
+const SEED = {
+  "2026-07-30": [
+    {rank:1, title:"日本熊本7.1级地震已致14人遇难，半导体产业链受冲击", summary:"7月28日日本熊本县发生7.1级强震，最大震度达7级，已致14人死亡、数十人受伤。熊本聚集瑞萨、索尼等多家半导体工厂，地震后多家工厂停工检修，或推升功率半导体价格预期。", source:"新华社/新浪财经", category:"国际", url:"https://finance.sina.com.cn/jjxw/2026-07-30/doc-inikptav2044197.shtml", publishedAt:"2026-07-30 08:20"},
+    {rank:2, title:"存储芯片龙头兆易创新披露最高20亿元注销式回购预案", summary:"7月29日晚间，兆易创新披露最高20亿元注销式回购预案，董事长公布配套增持计划。海亮股份等多家企业重要股东亦陆续加码，产业资本真金白银传递积极信号。", source:"四大证券报/新浪财经", category:"财经", url:"https://finance.sina.com.cn/stock/y/2026-07-30/doc-inikptav2048784.shtml", publishedAt:"2026-07-30 07:30"},
+    {rank:3, title:"国内成品油明晚24时迎来年内第15轮调价，汽油每吨或上调700元", summary:"7月31日24时国内成品油调价，机构测算汽油每吨上调700元、柴油675元，折合92号每升涨约0.56元。目前全国92号零售均价7.4元/升。", source:"QQ新闻/金投原油", category:"财经", url:"https://news.qq.com/rain/a/20260730A02U0800", publishedAt:"2026-07-30 09:00"},
+    {rank:4, title:"国务院国资委部署下半年地方国企改革重点任务", summary:"7月28日至29日，国务院国资委在京举办地方国资委负责人研讨班，总结上半年工作，研究部署下半年地方国企改革深化提升行动重点任务。", source:"国资委/四大证券报", category:"时政", url:"https://finance.sina.com.cn/stock/y/2026-07-30/doc-inikptav2048784.shtml", publishedAt:"2026-07-30 07:35"},
+    {rank:5, title:"今日头条上半年处置水军账号85万个，拦截虚假刷量1900亿次", summary:"今日头条安全中心发布网络水军治理专项公告：2026年1-6月累计清理虚假关注超1117万个，线上拦截虚假刷量请求超1900亿次，处置刷量及垃圾注册账号85.7万个。", source:"中国新闻网", category:"科技", url:"https://www.chinanews.com/cj/2026/07-30/10669085.shtml", publishedAt:"2026-07-30 10:00"},
+    {rank:6, title:"2026工信领域创新任务揭榜挂帅工作启动", summary:"工信部启动2026年工信领域创新任务揭榜挂帅工作，聚焦关键核心技术攻关，面向全社会征集揭榜单位，推动制造业重点产业链高质量发展。", source:"人民日报/中国共产党新闻网", category:"科技", url:"https://cpc.people.com.cn/GB/64093/64387/index1.html", publishedAt:"2026-07-30 09:20"},
+    {rank:7, title:"全国侨务工作会议在京召开，习近平作出重要指示", summary:"7月27-28日全国侨务工作会议在京召开，习近平总书记作出重要指示，强调凝聚侨心侨力、同圆共享中国梦，做好新时代侨务工作。", source:"联合早报/央视", category:"时政", url:"https://www.zaobao.cn/news/202607/6758.html", publishedAt:"2026-07-30 09:45"},
+    {rank:8, title:"第一财经科技创新产业融合发展大会在沪举行，聚焦硬科技产业化", summary:"7月28日第一财经科技创新产业融合发展大会在上海陆家嘴启幕，以'构建生态赋能推动创新成长'为主题，政产学研投四界同台，聚焦AI底层架构到应用终端全链条。", source:"第一财经", category:"科技", url:"https://www.yicai.com/news/103288365.html", publishedAt:"2026-07-28 14:00"},
+    {rank:9, title:"A股科创50指数回调，光通信、CPO板块跌幅居前", summary:"7月28日A股科创50指数日内跌幅一度达4%，源杰科技跌13.1%、生益电子跌9.6%、佰维存储跌8.9%。光通信、CPO、铜缆高速连接板块跌幅居前，北证50相对抗跌。", source:"百度百家号", category:"财经", url:"https://baijiahao.baidu.com/s?id=1871929698005733156", publishedAt:"2026-07-28 11:00"},
+    {rank:10, title:"部分能源资源行业企业城镇土地使用税政策将调整", summary:"财政部、税务总局联合发文，将对部分能源资源行业企业城镇土地使用税政策进行调整优化，助力企业降本增效，相关政策自2026年起执行。", source:"人民日报", category:"财经", url:"https://cpc.people.com.cn/GB/64093/64387/index1.html", publishedAt:"2026-07-30 08:00"}
+  ],
+  "2026-07-29": [
+    {rank:1, title:"日本熊本县7.1级地震最大震度7，引发海啸注意报", summary:"7月28日16时27分日本熊本县发生7.1级强烈地震，最大震度达日本标准最高等级'震度7'，并引发海啸注意报。地震造成大量建筑倒塌，人员伤亡持续上升。", source:"日本气象厅/新浪", category:"国际", url:"https://sina.cn/news/detail/5325717294285238.html", publishedAt:"2026-07-29 08:00"},
+    {rank:2, title:"瑞萨、索尼熊本半导体工厂停工检修，功率半导体价格看涨", summary:"截至7月29日晚，瑞萨两座工厂、索尼熊本工厂等多家半导体企业因地震停工检修。熊本'硅岛九州'复兴愿景受挫，市场预期功率半导体价格或上行。", source:"雪球/新浪财经", category:"科技", url:"https://xueqiu.com/1340374092/402746195", publishedAt:"2026-07-29 21:00"},
+    {rank:3, title:"世界人工智能合作组织成立，中亚专家称是里程碑", summary:"中亚人工智能协会主席、上合组织前秘书长表示，世界人工智能合作组织成立是人工智能全球治理的里程碑事件，推动国际AI合作新格局。", source:"云南网", category:"科技", url:"https://news.yunnan.cn/system/2026/07/29/034101163.shtml", publishedAt:"2026-07-29 10:00"},
+    {rank:4, title:"外交部回应日本熊本地震：对遇难者表示哀悼", summary:"7月29日外交部发言人毛宁主持例行记者会，对日本熊本地震遇难者表示哀悼。中国驻日本使领馆已第一时间启动应急机制，核实中国公民伤亡情况。", source:"今日头条/外交部", category:"国际", url:"https://www.toutiao.com/", publishedAt:"2026-07-29 16:00"},
+    {rank:5, title:"长鑫科技7月27日科创板上市，国内DRAM龙头登陆资本市场", summary:"国内DRAM存储芯片龙头长鑫科技7月27日正式在科创板挂牌交易，股票代码688825，发行价8.66元/股。2026年第一季度业绩表现强劲。", source:"百度百家号", category:"科技", url:"https://baijiahao.baidu.com/s?id=1871584062306921587", publishedAt:"2026-07-29 09:00"},
+    {rank:6, title:"公募REITs二级市场连续三周下跌，二季报业绩整体承压", summary:"公募REITs二级市场连续三周下跌，二季报业绩整体承压。与此同时VC/PE市场数亿元级融资密集落地，两只硬科技基金宣布募资。", source:"每日经济新闻", category:"财经", url:"https://www.nbd.com.cn/columns/432/", publishedAt:"2026-07-29 18:00"},
+    {rank:7, title:"银行间主要利率债走势分化，30年期国债收益率下行", summary:"7月28日银行间主要利率债午间走势分化，30年期'26超长特别国债04'收益率下行0.65bp报2.1880%，10年期国开债收益率下行0.1bp报1.7905%。", source:"每经网", category:"财经", url:"http://live.nbd.com.cn/", publishedAt:"2026-07-29 11:40"},
+    {rank:8, title:"特朗普暂停对伊朗空袭，结束连续13天每日打击", summary:"7月25日美国总统特朗普下令暂停当天对伊朗的空袭，结束此前连续13天的每日打击行动。此举被认为是为外交谈判留出空间，美军仍制定恢复大规模行动预案。", source:"新浪财经", category:"国际", url:"https://finance.sina.com.cn/headline/2026-07-26/doc-inikassr0645017.shtml", publishedAt:"2026-07-29 09:30"},
+    {rank:9, title:"WAIC 2026聚焦从大模型到智能体，迈向自主智能新纪元", summary:"7月18日WAIC2026'从大模型到智能体：迈向自主智能新纪元'论坛在上海举办，中国信通院承办，围绕智能体技术演进、标准化建设、行业落地路径深度研讨。", source:"中国日报", category:"科技", url:"https://cn.chinadaily.com.cn/a/202607/19/WS6a5cb114a310d709c2fbe529.html", publishedAt:"2026-07-29 14:00"},
+    {rank:10, title:"剑桥科技触及跌停，高估值回调叠加现金流压力", summary:"7月28日剑桥科技触及跌停，跌停价156.4元，涨幅-10%，总市值575.94亿元。分析称跌停原因为高估值回调+现金流压力+股东减持多重因素叠加。", source:"百度百家号", category:"财经", url:"https://baijiahao.baidu.com/s?id=1871924736456858772", publishedAt:"2026-07-29 15:00"}
+  ],
+  "2026-07-28": [
+    {rank:1, title:"日本熊本县发生7.1级强震，最大震度7级", summary:"当地时间7月28日16时27分，日本熊本县发生7.1级强烈地震，最大震度达到日本标准最高等级'震度7'，并引发海啸注意报。大量建筑倒塌，损失惨重。", source:"日本气象厅/网易", category:"国际", url:"https://m.163.com/local/article/L2UL69HK0536NZ17.html", publishedAt:"2026-07-28 16:30"},
+    {rank:2, title:"第一财经科技创新产业融合发展大会在上海陆家嘴启幕", summary:"7月28日第一财经科技创新产业融合发展大会在上海陆家嘴启幕，主题'构建生态赋能推动创新成长'，政产学研投四界同台，锚定未来产业落地深度攻坚。", source:"第一财经/百度", category:"科技", url:"https://baijiahao.baidu.com/s?id=1871339909558410729", publishedAt:"2026-07-28 09:00"},
+    {rank:3, title:"长鑫科技科创板正式挂牌交易，发行价8.66元", summary:"国内DRAM存储芯片领域龙头长鑫科技7月27日正式在科创板挂牌交易，股票代码688825，发行价8.66元/股。2026年第一季度业绩表现强劲。", source:"百度百家号", category:"科技", url:"https://baijiahao.baidu.com/s?id=1871584062306921587", publishedAt:"2026-07-28 08:00"},
+    {rank:4, title:"A股科创50指数跌幅显著，光通信CPO板块领跌", summary:"7月28日科创50指数日内跌幅一度达4%，源杰科技跌13.1%、生益电子跌9.6%、佰维存储跌8.9%。光通信、CPO、铜缆高速连接板块跌幅居前。", source:"百度百家号", category:"财经", url:"https://baijiahao.baidu.com/s?id=1871929698005733156", publishedAt:"2026-07-28 10:47"},
+    {rank:5, title:"剑桥科技跌停，高估值回调+现金流压力", summary:"7月28日剑桥科技触及跌停，跌停价156.4元，涨幅-10%，总市值575.94亿元，总成交额21.99亿元。高估值回调叠加现金流压力、股东减持。", source:"百度百家号", category:"财经", url:"https://baijiahao.baidu.com/s?id=1871924736456858772", publishedAt:"2026-07-28 14:00"},
+    {rank:6, title:"纳指科技ETF景顺28日开市起停牌至10:30", summary:"纳指科技ETF景顺(159509)将于2026年7月28日开市起停牌，自10:30起复牌，停牌期间赎回业务照常办理。", source:"每日经济新闻", category:"财经", url:"https://www.nbd.com.cn/articles/2026-07-27/4517371.html", publishedAt:"2026-07-28 09:30"},
+    {rank:7, title:"港股恒生科技指数涨0.16%，银行间利率债走势分化", summary:"7月28日港股午间收盘，恒生指数跌0.11%，恒生科技指数涨0.16%。银行间主要利率债午间走势分化，30年期国债收益率下行0.65bp。", source:"每经网", category:"财经", url:"http://live.nbd.com.cn/", publishedAt:"2026-07-28 11:40"},
+    {rank:8, title:"中证500ETF南方周一净流入近35亿元", summary:"ETF规模速报显示，中证500ETF南方周一净流入近35亿元，近5200只个股飘红，超20只基金单日涨逾6%，市场资金活跃。", source:"每日经济新闻", category:"财经", url:"https://www.nbd.com.cn/columns/432/", publishedAt:"2026-07-28 08:01"},
+    {rank:9, title:"7月最后一周财经事件：长鑫上市、科创大会等多节点", summary:"7月27日-31日这一周资本市场多事件值得关注：长鑫科技科创板上市、第一财经科创大会、多项经济数据发布等。", source:"百度百家号", category:"财经", url:"https://baijiahao.baidu.com/s?id=1871584062306921587", publishedAt:"2026-07-28 07:00"},
+    {rank:10, title:"特朗普暂停对伊朗空袭，为外交谈判留空间", summary:"7月25日特朗普下令暂停当天对伊朗的空袭，结束连续13天的每日打击。此举被认为是为外交谈判留出空间，美军仍制定恢复大规模行动预案。", source:"新浪财经", category:"国际", url:"https://finance.sina.com.cn/headline/2026-07-26/doc-inikassr0645017.shtml", publishedAt:"2026-07-28 09:00"}
+  ]
+};
+
+/* =========================================================
+   分类配置
+========================================================= */
+const CAT_TEXT_COLORS = {
+  "时政":"#7A5A8E","国际":"#3E5A7E","财经":"#3E7A5E","科技":"#3E7A7E",
+  "社会":"#9E5A5E","体育":"#7E3E7A","娱乐":"#9E3E5E","其他":"#7E7A5E"
+};
+const CATEGORIES = ["时政","国际","财经","科技","社会","体育","娱乐","其他"];
+const CAT_COLORS = {
+  "时政":"#E1D4E8",   /* 浅奶紫 */
+  "国际":"#C1DAE7",   /* 浅天蓝 */
+  "财经":"#D7E7D7",   /* 薄荷绿 */
+  "科技":"#D4F0EE",   /* 浅青 */
+  "社会":"#FFE3DF",   /* 浅珊瑚 */
+  "体育":"#EADDE5",   /* 浅粉紫 */
+  "娱乐":"#F5C6C3",   /* 蜜桃粉 */
+  "其他":"#EFEDDF"    /* 浅米黄 */
+};
+
+/* =========================================================
+   状态
+========================================================= */
+const LS_KEY = 'newsWorkbenchData_v1';
+const LS_FAV = 'newsWorkbenchFav_v1';
+const LS_READ = 'newsWorkbenchRead_v1';
+
+let state = {
+  view: 'calendar',           // calendar | search
+  calDate: new Date(),        // 日历当前展示月
+  selectedDate: null,         // 选中的日期 yyyy-mm-dd
+  data: {},                   // {date: [news]}
+  fav: {},                    // {newsId: true}
+  read: {},                   // {newsId: true}
+  selectedCats: new Set(),
+  kw: '', fromDate:'', toDate:''
+};
+
+/* =========================================================
+   工具函数
+========================================================= */
+function fmt(d){ // Date -> yyyy-mm-dd
+  const y=d.getFullYear(), m=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${dd}`;
+}
+function todayStr(){ return fmt(new Date()); }
+function uid(date, rank){ return `${date}-${rank}`; }
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg;
+  t.classList.add('show'); clearTimeout(t._tid);
+  t._tid=setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* =========================================================
+   数据加载与持久化
+========================================================= */
+function loadData(){
+  try{
+    const saved = localStorage.getItem(LS_KEY);
+    if(saved){
+      state.data = JSON.parse(saved);
+    }
+  }catch(e){ state.data={}; }
+  // 合并种子（种子为基线，不覆盖用户已存在日期）
+  Object.keys(SEED).forEach(d=>{
+    if(!state.data[d]) state.data[d] = JSON.parse(JSON.stringify(SEED[d]));
+  });
+  try{ state.fav = JSON.parse(localStorage.getItem(LS_FAV)||'{}'); }catch(e){ state.fav={}; }
+  try{ state.read = JSON.parse(localStorage.getItem(LS_READ)||'{}'); }catch(e){ state.read={}; }
+  saveData();
+}
+function saveData(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state.data)); }catch(e){}
+  try{ localStorage.setItem(LS_FAV, JSON.stringify(state.fav)); }catch(e){}
+  try{ localStorage.setItem(LS_READ, JSON.stringify(state.read)); }catch(e){}
+}
+
+/* =========================================================
+   抓取更新（尽力而为，CORS失败静默降级）
+========================================================= */
+const FETCH_SOURCES = [
+  // RSSHub 公共节点 - 央视新闻
+  {url:'https://rsshub.app/cctv/news', cat:'时政', weight:3},
+  // RSSHub - 新华社
+  {url:'https://rsshub.app/xinhuanet/news', cat:'时政', weight:3},
+  // RSSHub - 36氪
+  {url:'https://rsshub.app/36kr/newsflashes', cat:'科技', weight:2},
+  // RSSHub - 澎湃新闻
+  {url:'https://rsshub.app/thepaper/newsDetail/25923', cat:'社会', weight:2},
+];
+
+async function tryFetchToday(){
+  const today = todayStr();
+  let items = [];
+  const cutoff = new Date(Date.now() - 36*3600*1000); // 36小时内
+
+  for(const src of FETCH_SOURCES){
+    try{
+      const ctrl = new AbortController();
+      const tid = setTimeout(()=>ctrl.abort(), 5000);
+      const resp = await fetch(src.url, {signal:ctrl.signal, cache:'no-store'});
+      clearTimeout(tid);
+      if(!resp.ok) continue;
+      const text = await resp.text();
+      // 解析 RSS XML
+      const doc = new DOMParser().parseFromString(text, 'text/xml');
+      const elems = doc.querySelectorAll('item');
+      elems.forEach((it, idx)=>{
+        if(idx>=8) return;
+        const title = it.querySelector('title')?.textContent?.trim() || '';
+        const link = it.querySelector('link')?.textContent?.trim() || '';
+        const pubD = it.querySelector('pubDate')?.textContent?.trim() || '';
+        const desc = it.querySelector('description')?.textContent?.trim() || '';
+        let pd = new Date(pubD);
+        if(isNaN(pd)) pd = new Date();
+        if(pd < cutoff) return;
+        items.push({
+          rank: 0,
+          title: title.replace(/<[^>]+>/g,'').slice(0,80),
+          summary: desc.replace(/<[^>]+>/g,'').slice(0,200),
+          source: src.cat==='科技'?'36氪':src.cat==='社会'?'澎湃新闻':'央视/新华',
+          category: src.cat,
+          url: link,
+          publishedAt: `${pd.getFullYear()}-${String(pd.getMonth()+1).padStart(2,'0')}-${String(pd.getDate()).padStart(2,'0')} ${String(pd.getHours()).padStart(2,'0')}:${String(pd.getMinutes()).padStart(2,'0')}`,
+          _weight: src.weight,
+          _ts: pd.getTime()
+        });
+      });
+    }catch(e){ /* CORS 或网络失败，静默 */ }
+  }
+
+  if(items.length===0) return false;
+
+  // 去重 + 排序 + 取Top10
+  const seen = new Set();
+  items = items.filter(it=>{
+    const k = it.title.slice(0,20);
+    if(seen.has(k)) return false; seen.add(k); return true;
+  });
+  items.sort((a,b)=> (b._weight - a._weight) || (b._ts - a._ts));
+  items = items.slice(0,10).map((it,i)=>({...it, rank:i+1, id: uid(today, 'f'+(i+1))}));
+  items.forEach(it=> delete it._weight, delete it._ts);
+
+  // 合并：若抓取结果>=6条则替换今天，否则保留种子
+  if(items.length >= 6){
+    state.data[today] = items;
+    saveData();
+    return true;
+  }
+  return false;
+}
+
+/* =========================================================
+   渲染：头部日期
+========================================================= */
+function renderHeader(){
+  const now = new Date();
+  const wk = ['日','一','二','三','四','五','六'][now.getDay()];
+  document.getElementById('todayLabel').textContent = `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日`;
+  document.getElementById('weekLabel').textContent = `星期${wk}`;
+}
+
+/* =========================================================
+   渲染：分类筛选 chips
+========================================================= */
+function renderCatChips(){
+  const box = document.getElementById('catChips');
+  box.innerHTML = '';
+  CATEGORIES.forEach(c=>{
+    const el = document.createElement('span');
+    el.className = 'chip';
+    el.textContent = c;
+    el.onclick = ()=>{
+      if(state.selectedCats.has(c)) state.selectedCats.delete(c);
+      else state.selectedCats.add(c);
+      el.classList.toggle('on');
+    };
+    box.appendChild(el);
+  });
+}
+
+/* =========================================================
+   渲染：日历（前后两周横向条带）
+========================================================= */
+function renderCalendar(){
+  const center = state.calDate; // 中心日期
+  const strip = document.getElementById('calStrip');
+  strip.innerHTML='';
+  const today = todayStr();
+  const dowNames = ['日','一','二','三','四','五','六'];
+
+  // 以 center 为中心，前后各14天，共29天
+  for(let off=-14; off<=14; off++){
+    const d = new Date(center);
+    d.setDate(d.getDate()+off);
+    const dateStr = fmt(d);
+    const news = state.data[dateStr] || [];
+
+    const el = document.createElement('div');
+    el.className = 'cal-cell';
+    if(dateStr===today) el.classList.add('today');
+    if(dateStr===state.selectedDate) el.classList.add('selected');
+    if(news.length>0) el.classList.add('has-news');
+
+    const dowEl = document.createElement('div');
+    dowEl.className='dow'; dowEl.textContent = dowNames[d.getDay()];
+    el.appendChild(dowEl);
+
+    const numEl = document.createElement('div');
+    numEl.className='num'; numEl.textContent = d.getDate();
+    el.appendChild(numEl);
+
+    if(news.length>0){
+      const dots=document.createElement('div'); dots.className='dots';
+      const cats=new Set(news.map(n=>n.category));
+      [...cats].slice(0,3).forEach(c=>{
+        const dot=document.createElement('span'); dot.className='dot';
+        dot.style.background=CAT_COLORS[c]||'#8A9A8D';
+        dots.appendChild(dot);
+      });
+      el.appendChild(dots);
+      const cnt=document.createElement('div'); cnt.className='cnt'; cnt.textContent=`${news.length}条`;
+      el.appendChild(cnt);
+    } else {
+      // 占位保持高度一致
+      const ph=document.createElement('div'); ph.className='dots'; el.appendChild(ph);
+    }
+
+    el.onclick=()=>{
+      state.selectedDate=dateStr;
+      renderCalendar();
+      renderNewsPanel(dateStr);
+      // 滚动到选中项
+      setTimeout(()=>{
+        el.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+      },30);
+    };
+    strip.appendChild(el);
+  }
+
+  // 更新标题
+  const firstD = new Date(center); firstD.setDate(firstD.getDate()-14);
+  const lastD = new Date(center); lastD.setDate(lastD.getDate()+14);
+  document.getElementById('calYear').textContent = center.getFullYear()+'年';
+  document.getElementById('calRange').textContent =
+    `${firstD.getMonth()+1}/${firstD.getDate()} ~ ${lastD.getMonth()+1}/${lastD.getDate()}`;
+
+  // 自动滚动到选中/今天
+  setTimeout(()=>{
+    const target = strip.querySelector('.cal-cell.selected') || strip.querySelector('.cal-cell.today');
+    if(target) target.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+  },50);
+}
+
+/* =========================================================
+   渲染：当日新闻面板
+========================================================= */
+function renderNewsPanel(dateStr){
+  const panel = document.getElementById('newsPanel');
+  const news = state.data[dateStr] || [];
+  const [y,mm,dd] = dateStr.split('-');
+  const wk = ['日','一','二','三','四','五','六'][new Date(dateStr).getDay()];
+
+  let html = `<div class="news-head">
+    <h2>每日精选 · Top 10</h2>
+    <span class="date">${y}年${parseInt(mm)}月${parseInt(dd)}日 · 星期${wk}</span>
+    <span class="sub">共 ${news.length} 条</span>
+  </div>`;
+
+  if(news.length===0){
+    html += `<div class="empty"><div class="icon">☐</div>当日暂无新闻数据<br><span style="font-size:12px">可点击底部"立即刷新今日"尝试联网抓取</span></div>`;
+    panel.innerHTML = html;
+    return;
+  }
+
+  html += '<div class="news-list">';
+  news.forEach(n=>{
+    const id = n.id || uid(dateStr, n.rank);
+    const isFav = state.fav[id] ? 'on' : '';
+    const isRead = state.read[id] ? 'read' : '';
+    const catColor = CAT_COLORS[n.category] || '#EFEDDF';
+    const catTxt = CAT_TEXT_COLORS[n.category] || '#7E7A5E';
+    html += `<div class="news-card ${isRead}" data-id="${id}">
+      <div class="rank">${n.rank}</div>
+      <div class="body">
+        <div class="title"><a href="${n.url}" target="_blank" rel="noopener">${n.title}</a></div>
+        <div class="summary">${n.summary}</div>
+        <div class="tags">
+          <span class="tag cat" style="background:${catColor};color:${catTxt}">${n.category}</span>
+          <span class="tag src">${n.source}</span>
+          <span class="tag">${n.publishedAt || ''}</span>
+        </div>
+      </div>
+      <button class="fav ${isFav}" data-id="${id}" title="收藏">★</button>
+    </div>`;
+  });
+  html += '</div>';
+  panel.innerHTML = html;
+
+  // 绑定收藏 & 已读
+  panel.querySelectorAll('.fav').forEach(b=>{
+    b.onclick = (e)=>{
+      e.stopPropagation();
+      const id = b.dataset.id;
+      state.fav[id] = !state.fav[id];
+      saveData();
+      b.classList.toggle('on');
+    };
+  });
+  panel.querySelectorAll('.news-card .title a').forEach(a=>{
+    a.onclick = ()=>{
+      const card = a.closest('.news-card');
+      const id = card.dataset.id;
+      state.read[id] = true; saveData();
+      card.classList.add('read');
+    };
+  });
+}
+
+/* =========================================================
+   查询功能
+========================================================= */
+function doSearch(){
+  const kw = document.getElementById('kwInput').value.trim().toLowerCase();
+  const from = document.getElementById('fromDate').value;
+  const to = document.getElementById('toDate').value;
+  const cats = state.selectedCats;
+
+  let results = [];
+  Object.keys(state.data).forEach(date=>{
+    if(from && date < from) return;
+    if(to && date > to) return;
+    (state.data[date]||[]).forEach(n=>{
+      if(cats.size>0 && !cats.has(n.category)) return;
+      if(kw){
+        const hay = (n.title + ' ' + n.summary + ' ' + n.source).toLowerCase();
+        if(!hay.includes(kw)) return;
+      }
+      results.push({...n, date});
+    });
+  });
+  results.sort((a,b)=> (b.date > a.date ? 1 : -1) || (a.rank - b.rank));
+
+  // 切换到查询视图
+  switchView('search');
+  const meta = document.getElementById('resultMeta');
+  meta.innerHTML = `查询到 <b>${results.length}</b> 条结果 · 关键词「${kw||'无'}」· 分类「${cats.size?[...cats].join('/'):'全部'}」· 日期「${from||'不限'} ~ ${to||'不限'}」`;
+
+  const list = document.getElementById('searchResults');
+  if(results.length===0){
+    list.innerHTML = `<div class="empty"><div class="icon">⊘</div>未找到匹配的新闻</div>`;
+    return;
+  }
+  list.innerHTML = results.map(n=>{
+    const id = n.id || uid(n.date, n.rank);
+    const isFav = state.fav[id] ? 'on' : '';
+    const isRead = state.read[id] ? 'read' : '';
+    const catColor = CAT_COLORS[n.category] || '#EFEDDF';
+    const catTxt = CAT_TEXT_COLORS[n.category] || '#7E7A5E';
+    const [y,mm,dd] = n.date.split('-');
+    return `<div class="news-card ${isRead}" data-id="${id}">
+      <div class="rank">${n.rank}</div>
+      <div class="body">
+        <div class="title"><a href="${n.url}" target="_blank" rel="noopener">${n.title}</a></div>
+        <div class="summary">${n.summary}</div>
+        <div class="tags">
+          <span class="tag cat" style="background:${catColor};color:${catTxt}">${n.category}</span>
+          <span class="tag src">${n.source}</span>
+          <span class="tag">${n.date} ${n.publishedAt?.split(' ')[1]||''}</span>
+        </div>
+      </div>
+      <button class="fav ${isFav}" data-id="${id}" title="收藏">★</button>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.fav').forEach(b=>{
+    b.onclick = (e)=>{ e.stopPropagation();
+      const id = b.dataset.id;
+      state.fav[id] = !state.fav[id]; saveData();
+      b.classList.toggle('on');
+    };
+  });
+  list.querySelectorAll('.news-card .title a').forEach(a=>{
+    a.onclick = ()=>{
+      const card = a.closest('.news-card');
+      const id = card.dataset.id;
+      state.read[id] = true; saveData();
+      card.classList.add('read');
+    };
+  });
+}
+
+/* =========================================================
+   视图切换
+========================================================= */
+function switchView(v){
+  state.view = v;
+  document.querySelectorAll('.view-tabs button').forEach(b=>{
+    b.classList.toggle('active', b.dataset.view===v);
+  });
+  document.getElementById('calView').style.display = v==='calendar'?'block':'none';
+  document.getElementById('searchView').style.display = v==='search'?'block':'none';
+}
+
+/* =========================================================
+   事件绑定
+========================================================= */
+function bindEvents(){
+  document.querySelectorAll('.view-tabs button').forEach(b=>{
+    b.onclick = ()=>{
+      if(b.dataset.view==='search' && !document.getElementById('searchResults').children.length){
+        doSearch();
+      } else {
+        switchView(b.dataset.view);
+      }
+    };
+  });
+
+  document.getElementById('prevWeek').onclick = ()=>{
+    state.calDate = new Date(state.calDate.getFullYear(), state.calDate.getMonth(), state.calDate.getDate()-14);
+    renderCalendar();
+  };
+  document.getElementById('nextWeek').onclick = ()=>{
+    state.calDate = new Date(state.calDate.getFullYear(), state.calDate.getMonth(), state.calDate.getDate()+14);
+    renderCalendar();
+  };
+  document.getElementById('todayBtn').onclick = ()=>{
+    state.calDate = new Date();
+    state.selectedDate = todayStr();
+    renderCalendar();
+    renderNewsPanel(state.selectedDate);
+  };
+
+  document.getElementById('searchBtn').onclick = doSearch;
+  document.getElementById('kwInput').addEventListener('keydown', e=>{
+    if(e.key==='Enter') doSearch();
+  });
+  document.getElementById('resetBtn').onclick = ()=>{
+    document.getElementById('kwInput').value='';
+    document.getElementById('fromDate').value='';
+    document.getElementById('toDate').value='';
+    state.selectedCats.clear();
+    document.querySelectorAll('#catChips .chip').forEach(c=>c.classList.remove('on'));
+    switchView('calendar');
+    toast('已重置查询条件');
+  };
+
+  document.getElementById('refreshBtn').onclick = async ()=>{
+    toast('正在联网抓取今日新闻…');
+    const ok = await tryFetchToday();
+    if(ok){
+      toast('今日新闻已更新');
+      if(state.selectedDate===todayStr() || !state.selectedDate){
+        state.selectedDate = todayStr();
+        renderCalendar();
+        renderNewsPanel(state.selectedDate);
+      }
+    } else {
+      toast('未能联网更新，使用现有数据');
+    }
+  };
+}
+
+/* =========================================================
+   初始化
+========================================================= */
+async function init(){
+  loadData();
+  renderHeader();
+  renderCatChips();
+  renderCalendar();
+  state.selectedDate = todayStr();
+  renderNewsPanel(state.selectedDate);
+  bindEvents();
+
+  // 默认查询结果区也填一份
+  doSearch();
+  switchView('calendar');
+
+  // 后台静默尝试抓取今天
+  tryFetchToday().then(ok=>{
+    if(ok && state.selectedDate===todayStr()){
+      renderCalendar();
+      renderNewsPanel(state.selectedDate);
+    }
+  });
+}
+
+init();
+</script>
+</body>
+</html>
