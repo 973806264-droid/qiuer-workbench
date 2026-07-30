@@ -382,8 +382,8 @@ footer .refresh:hover{text-decoration:underline}
     <div class="news-list" id="talentResults"></div>
   </section>
 
-  <footer>
-    数据存于本地浏览器 · 每日新闻种子数据截至 2026-07-30 · 人才文章近三年精选
+  <footer id="appFooter">
+    数据存于本地浏览器
   </footer>
 </div>
 
@@ -721,7 +721,7 @@ function renderNewsPanel(dateStr){
         <div class="title"><a href="${n.url}" target="_blank" rel="noopener">${n.title}</a></div>
         <div class="summary">${n.summary}</div>
         <div class="tags">
-          <span class="tag cat" style="background:${catColor};color:${catTxt}">${n.category}</span>
+          <span class="tag cat">${n.category}</span>
           <span class="tag src">${n.source}</span>
           <span class="tag">${n.publishedAt || ''}</span>
         </div>
@@ -788,7 +788,7 @@ function doSearch(){
         <div class="title"><a href="${n.url}" target="_blank" rel="noopener">${n.title}</a></div>
         <div class="summary">${n.summary}</div>
         <div class="tags">
-          <span class="tag cat" style="background:${catColor};color:${catTxt}">${n.category}</span>
+          <span class="tag cat">${n.category}</span>
           <span class="tag src">${n.source}</span>
           <span class="tag">${n.date} ${n.publishedAt?.split(' ')[1]||''}</span>
         </div>
@@ -975,6 +975,11 @@ function showApp(name){
   ['menuView','newsApp','talentApp'].forEach(id=>{
     document.getElementById(id).style.display = (id===target) ? 'block' : 'none';
   });
+  // 动态更新 footer
+  const footer = document.getElementById('appFooter');
+  if(name==='news') footer.innerHTML = '每日新闻 · 种子数据截至 2026-07-30 · 数据存于本地浏览器';
+  else if(name==='talent') footer.innerHTML = '人才工作文章 · 近三年精选 · 来自官方权威渠道 · 数据存于本地浏览器';
+  else footer.innerHTML = 'qiuer的工作台 · 数据存于本地浏览器';
   if(name==='talent'){
     setTimeout(()=>{ renderTalentChips(); doTalentSearch(); },30);
   }
@@ -1039,7 +1044,7 @@ function doTalentSearch(){
           <span class="tag cat">${a.topic}</span>
           <span class="tag src">${a.source}</span>
           <span class="tag">${a.publishDate}</span>
-          <span class="tag" style="background:var(--accent);color:#FFFFFF;border-color:var(--accent2)">${a.sourceType}</span>
+          <span class="tag src">${a.sourceType}</span>
         </div>
       </div>
     </div>`;
