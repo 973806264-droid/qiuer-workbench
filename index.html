@@ -380,7 +380,7 @@ footer .refresh:hover{text-decoration:underline}
 <div class="app">
 
   <!-- ===== 头部 ===== -->
-  <header>
+  <header id="appHeader">
     <div class="brand">
       <div>
         <h1>qiuer的工作台 🗞️</h1>
@@ -469,15 +469,15 @@ footer .refresh:hover{text-decoration:underline}
     <!-- 统计卡片 -->
     <div class="talent-stats">
       <div class="stat-item">
-        <div class="stat-num" id="statTotal">17</div>
+        <div class="stat-num" id="statTotal">30</div>
         <div class="stat-label">文章总数</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num" id="statCentral">9</div>
-        <div class="stat-label">中央/政府</div>
+        <div class="stat-num" id="statCentral">15</div>
+        <div class="stat-label">政府网站</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num" id="statMedia">8</div>
+        <div class="stat-num" id="statMedia">9</div>
         <div class="stat-label">官方媒体</div>
       </div>
       <div class="stat-item">
@@ -1046,7 +1046,60 @@ const TALENT_ARTICLES = [
   {id:'t17', title:"做好新时代人才工作的根本遵循和行动指南",
    summary:"党的十八大以来，习近平总书记围绕人才工作发表的一系列重要论述，立意高远、内涵丰富、思想深刻，是我们党对人才事业发展规律认识的最新成果，是新时代人才工作的根本遵循和行动指南。",
    source:"求是网", sourceType:"官网", topic:"人才生态",
-   publishDate:"2024-06-13", url:"https://www.qstheory.cn/qshyjx/2024-06/13/c_1130162350.htm"}
+   publishDate:"2024-06-13", url:"https://www.qstheory.cn/qshyjx/2024-06/13/c_1130162350.htm"},
+  // ===== 扩充：地方实践与活动 =====
+  {id:'t18', title:"2025组织工作盘点·人才工作篇 | 让人才创新活力奔涌",
+   summary:"2025年，中央组织部以'人才助力西部开发'为主题，组织高层次专家赴甘肃、新疆开展咨询服务活动，45名院士专家深入一线，为西部地区产业发展、人才培养提供智力支持。",
+   source:"共产党员网", sourceType:"官网", topic:"人才活动",
+   publishDate:"2026-01-15", url:"https://www.12371.cn/2026/01/15/ARTI1768449520631443.shtml"},
+  {id:'t19', title:"改革多点突破 人才活力澎湃——2025年人社工作盘点·人才篇",
+   summary:"今年6月，人社部明确利用2年时间，开展博士后工作、职称和职业资格等6个方面24项专业技术人才管理服务改革工作，全面激发人才创新创造活力。",
+   source:"人社部官网", sourceType:"官网", topic:"人才活动",
+   publishDate:"2025-12-30", url:"https://www.mohrss.gov.cn/SYrlzyhshbzb/dongtaixinwen/buneiyaowen/rsxw/202512/t20251230_564637.html"},
+  {id:'t20', title:"上海市印发《上海市引进人才申办本市常住户口办法》",
+   summary:"为进一步发挥人才在促进新时代上海经济社会高质量发展中的核心作用，完善与上海经济社会发展相适应的人才引进政策体系，上海印发新版人才引进落户办法。",
+   source:"上海市人民政府", sourceType:"官网", topic:"人才引进",
+   publishDate:"2025-11-25", url:"https://www.shanghai.gov.cn/gwk/search/content/60b0fb0e670748a99ce7dd8fdb0e0939"},
+  {id:'t21', title:"打好政策宣传'组合拳'，营造人才服务'好生态'",
+   summary:"上海普陀区第五届普陀人才节期间，区委人才办联动各街道镇、产业部门围绕'靠普'人才学院系列活动、'海聚英才'路演大赛等，全方位营造人才服务良好生态。",
+   source:"腾讯新闻", sourceType:"公众号", topic:"人才生态",
+   publishDate:"2024-10-02", url:"https://news.qq.com/rain/a/20241002A05EHZ00"},
+  {id:'t22', title:"人才政策宣传月 | 植人才之林 蓄'繁花'之势——邯郸多措并举打好政策宣传'组合拳'",
+   summary:"为全面展示邯郸市人才政策优势，扩大政策知晓面、覆盖面、惠及面，在全社会营造尊重人才、尊重创新的浓厚氛围，邯郸市开展人才政策宣传月系列活动。",
+   source:"腾讯新闻", sourceType:"公众号", topic:"人才活动",
+   publishDate:"2024-11-27", url:"https://news.qq.com/rain/a/20241127A086LS00"},
+  {id:'t23', title:"迈皋桥街道全方位奏响人才工作宣传强音",
+   summary:"南京市栖霞区迈皋桥街道充分利用官方网站、微信公众号、微博等新媒体平台，开设'人才风采''人才政策解读'等专栏，定期发布街道人才工作动态。",
+   source:"南京市栖霞区政府", sourceType:"官网", topic:"人才活动",
+   publishDate:"2024-12-05", url:"https://www.njqxq.gov.cn/qxzx/gzdt/202412/t20241205_5026075.html"},
+  {id:'t24', title:"构筑全周期人才生态：数智赋能下的2025人才交流服务工作实践",
+   summary:"全年举办各类引才活动330余场，成功签约人才1.6万人，其中硕士及以上人才超4000人。数智赋能人才交流服务，构建全周期人才生态体系。",
+   source:"人民号", sourceType:"公众号", topic:"人才生态",
+   publishDate:"2026-01-28", url:"https://www.peopleapp.com/column/30051318327-500007329282"},
+  {id:'t25', title:"集聚人才合力 共赴壮阔前程——习近平总书记重要讲话指引广大知识分子",
+   summary:"习近平总书记在庆祝中国共产党成立105周年大会上的重要讲话，激励广大人才凝聚奋进力量，为实现中华民族伟大复兴贡献智慧和力量。",
+   source:"人民网", sourceType:"官媒", topic:"人才生态",
+   publishDate:"2026-07-07", url:"https://politics.people.com.cn/n1/2026/0707/c1001-40755396.html"},
+  {id:'t26', title:"中办国办印发《关于进一步加强青年科技人才培养和使用》",
+   summary:"为深入贯彻党的二十大精神，落实中央人才工作会议部署，全方位培养和用好青年科技人才，中共中央办公厅、国务院办公厅印发重要文件，对青年科技人才工作作出系统部署。",
+   source:"中国政府网", sourceType:"官网", topic:"政策",
+   publishDate:"2026-01-15", url:"https://www.gov.cn/zhengce/202601/content_7055109.htm"},
+  {id:'t27', title:"2026重点产业高层次引才新政解析",
+   summary:"2026年，我国人才政策迎来全面升级，重点产业高层次引才新政密集出台，标志着人才工作从'量的积累'转向'质的飞跃'的关键节点，集成电路、人工智能、生物医药等领域成为引才重点。",
+   source:"搜狐网", sourceType:"公众号", topic:"人才引进",
+   publishDate:"2026-03-15", url:"https://www.sohu.com/a/1031206818_122431487"},
+  {id:'t28', title:"中国青年人才发展全景：2026年最新政策与关键数据",
+   summary:"2026年中国青年人才发展政策全景梳理，涵盖国家重点研发计划青年项目、乡村振兴人才支持、科研经费自主权、基层人才补贴等关键政策与数据。",
+   source:"新浪", sourceType:"官媒", topic:"人才引进",
+   publishDate:"2026-07-26", url:"https://k.sina.cn/article_7880068380_1d5b04d1c06802q1g0.html"},
+  {id:'t29', title:"科技人才政策信息（2026年第4期）",
+   summary:"建立以创新能力、质量、实效、贡献为导向的人工智能人才评价机制，将符合条件的人才纳入广东省高层次人才认定范围，推动科技人才评价改革落地见效。",
+   source:"网易", sourceType:"公众号", topic:"政策",
+   publishDate:"2026-05-11", url:"https://www.163.com/dy/article/KSM0AJ6B051494VN.html"},
+  {id:'t30', title:"招才引智 人才强国——各地引才政策汇总",
+   summary:"人才是一个城市重要的资源，为吸引各地人才，部分城市出台相应人才政策，包含安家补助、租房补助、生活补助等。本文汇总各地最新引才福利政策。",
+   source:"学术桥", sourceType:"公众号", topic:"人才引进",
+   publishDate:"2025-08-01", url:"https://www.acabridge.cn/yczc/zxzc/202508/t20250801_2684220.shtml"}
 ];
 
 const TALENT_SOURCES = ["官网","官媒","公众号"];
@@ -1132,6 +1185,8 @@ function showApp(name){
   ['menuView','newsApp','talentApp'].forEach(id=>{
     document.getElementById(id).style.display = (id===target) ? 'block' : 'none';
   });
+  // 进入栏目时隐藏顶部标题，回主菜单时显示
+  document.getElementById('appHeader').style.display = (name==='menu') ? 'block' : 'none';
   if(name==='talent'){
     setTimeout(()=>{ renderTalentChips(); doTalentSearch(); },30);
   }
