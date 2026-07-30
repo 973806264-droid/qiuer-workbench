@@ -61,6 +61,7 @@ body::before{
 }
 .menu-news::before{background:radial-gradient(circle, var(--accent), transparent 70%)}
 .menu-talent::before{background:radial-gradient(circle, var(--hi2), transparent 70%)}
+.menu-meme::before{background:radial-gradient(circle, #D4A574, transparent 70%)}
 .menu-card:hover::before{transform:scale(1.3)}
 .menu-icon{font-size:32px; line-height:1; flex-shrink:0; margin-right:14px}
 .menu-row{display:flex; align-items:center}
@@ -95,6 +96,10 @@ body::before{
 .talent-banner::after{
   content:""; position:absolute; bottom:-40px; left:30%; width:100px; height:100px;
   border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,.1), transparent 70%);
+}
+.meme-banner{
+  background:linear-gradient(135deg, #B89185, #D4A574);
+  box-shadow:0 6px 18px rgba(184,145,133,.3);
 }
 .banner-title{font-family:var(--serif); font-size:22px; font-weight:700; letter-spacing:1px; margin-bottom:6px; position:relative; z-index:1}
 .banner-sub{font-size:12px; opacity:.85; letter-spacing:1px; position:relative; z-index:1}
@@ -415,6 +420,15 @@ footer .refresh:hover{text-decoration:underline}
           </div>
         </div>
       </div>
+      <div class="menu-card menu-meme" data-target="meme">
+        <div class="menu-row">
+          <div class="menu-icon">🔥</div>
+          <div>
+            <div class="menu-title">热梗收集站</div>
+            <div class="menu-desc">网络热门梗盘点，冲浪不掉线，社交不尴尬</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -535,6 +549,62 @@ footer .refresh:hover{text-decoration:underline}
 
     <div class="result-meta" id="talentResultMeta"></div>
     <div class="news-list" id="talentResults"></div>
+  </section>
+
+  <!-- ===== 热梗收集站 ===== -->
+<section id="memeApp" style="display:none">
+    <div class="back-bar">
+      <button class="btn-back" id="backFromMeme">← 返回工作台</button>
+    </div>
+
+    <!-- 顶部 Banner -->
+    <div class="talent-banner meme-banner">
+      <div class="banner-title">网络热梗收集站</div>
+      <div class="banner-sub">冲浪不掉线 · 社交不尴尬 · 持续更新</div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="talent-stats">
+      <div class="stat-item">
+        <div class="stat-num" id="memeStatTotal">30</div>
+        <div class="stat-label">热梗总数</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">6</div>
+        <div class="stat-label">分类</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2026</div>
+        <div class="stat-label">最新</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">快乐</div>
+      </div>
+    </div>
+
+    <!-- 分类筛选 -->
+    <div class="filter-group">
+      <div class="filter-label">分类</div>
+      <div class="filter-chips" id="memeCatChips">
+        <span class="chip on" data-val="all">全部</span>
+        <span class="chip" data-val="爆款">顶流爆款</span>
+        <span class="chip" data-val="职场">打工人</span>
+        <span class="chip" data-val="治愈">情绪治愈</span>
+        <span class="chip" data-val="社交">社交聊天</span>
+        <span class="chip" data-val="生活">生活日常</span>
+        <span class="chip" data-val="经典">经典百搭</span>
+      </div>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="memeKw" placeholder="搜索热梗名称或含义…">
+    </div>
+
+    <div class="result-meta" id="memeResultMeta"></div>
+    <div class="news-list" id="memeResults"></div>
   </section>
 
   <footer id="appFooter" style="display:none"></footer>
@@ -1109,6 +1179,45 @@ const TALENT_ARTICLES = [
    publishDate:"2025-08-01", url:"https://www.acabridge.cn/yczc/zxzc/202508/t20250801_2684220.shtml"}
 ];
 
+const MEME_DATA = [
+  // ===== 顶流爆款 =====
+  {id:'m1', name:"酱板鸭", meaning:"你以为在演白狐报恩，结果是被抛弃的酱板鸭来索命。形容'看似浪漫实则复仇'的反转局面。", source:"网络短视频二创", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"朋友讲离谱倒霉事 → '所以你是那只酱板鸭？'"},
+  {id:'m2', name:"咕咕嘎嘎", meaning:"不需要逻辑只需要快乐的魔性音频梗，像呆企鹅摇头晃脑。当代年轻人精神状态的写照。", source:"游戏角色二创魔性音频", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"群聊冷场时发一句'咕咕嘎嘎'化解尴尬"},
+  {id:'m3', name:"我的刀盾", meaning:"英文'What the dog doing'的魔性空耳，看到迷惑行为时的万能吐槽。配拿刀盾的狗子表情包。", source:"英文吐槽魔性发音+表情包", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"看到室友在宿舍跳舞 → 缓缓打出'我的刀盾'"},
+  {id:'m4', name:"邪修", meaning:"用离谱方法解决生活难题。源自修真小说'不走正道'，演变为年轻人的发疯哲学。", source:"修真小说文化衍生", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"不想上班去公园看大爷下棋，美其名曰'吸收天地灵气'"},
+  {id:'m5', name:"爱你老己", meaning:"方言版'爱你自己'，悦己经济的幽默版。游戏台词'爱你老妈'被魔改而来。", source:"游戏台词魔改", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"加班到深夜给自己点豪华外卖：'辛苦了老己'"},
+  // ===== 打工人 =====
+  {id:'m6', name:"精神离职", meaning:"人在工位，心已辞职。身体还在上班，灵魂已经自由。", source:"职场自嘲文化", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"周一早上坐在工位发呆时的精神状态"},
+  {id:'m7', name:"班味", meaning:"上班久了自带的疲惫气质，洗不掉去不了。放假也满脑子工作叫'班味入脑'。", source:"社交媒体职场话题", category:"职场", hotLevel:"🔥🔥🔥🔥🔥", usage:"照镜子发现越来越像中年社畜"},
+  {id:'m8', name:"摸鱼搭子", meaning:"一起摸鱼的同事，职场中最珍贵的革命友谊。", source:"打工人社交文化", category:"职场", hotLevel:"🔥🔥🔥", usage:"'走，去茶水间摸鱼搭子'"},
+  {id:'m9', name:"无效加班", meaning:"加班没产出，纯耗时间。领导不走谁也不敢走的职场潜规则。", source:"职场吐槽", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"晚上9点还在工位刷手机等领导走"},
+  {id:'m10', name:"毛囊报警", meaning:"熬夜压力大导致发际线后移，身体发出的预警信号。", source:"年轻人健康焦虑", category:"职场", hotLevel:"🔥🔥🔥", usage:"梳头时看着掉发：'毛囊报警了'"},
+  // ===== 情绪治愈 =====
+  {id:'m11', name:"允许一切发生", meaning:"与生活和解，接纳所有变数。拒绝内耗，拥抱不确定性。", source:"治愈系心理学流行", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"遇到挫折时默念：'允许一切发生'"},
+  {id:'m12', name:"人生旷野不是轨道", meaning:"拒绝被定义，人生没有标准答案。不是非得按部就班走轨道。", source:"治愈系文案", category:"治愈", hotLevel:"🔥🔥🔥🔥🔥", usage:"被问'什么时候结婚'时：'人生是旷野不是轨道'"},
+  {id:'m13', name:"电子布洛芬", meaning:"治愈坏心情的线上内容，看一眼就能止痛的暖心视频/图片。", source:"网络治愈文化", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"看猫咪视频缓解焦虑：'我的电子布洛芬'"},
+  {id:'m14', name:"活人感", meaning:"真实自然、不装不演。形容一个人有烟火气、接地气。", source:"社交媒体评价用语", category:"治愈", hotLevel:"🔥🔥🔥", usage:"夸人：'你很有活人感'"},
+  {id:'m15', name:"松弛人生", meaning:"不紧绷、不焦虑、不内卷的生活态度。2026年最流行的生活哲学。", source:"生活方式潮流", category:"治愈", hotLevel:"🔥🔥🔥🔥🔥", usage:"拒绝加班：'我要过松弛人生'"},
+  // ===== 社交聊天 =====
+  {id:'m16', name:"你乘十说", meaning:"'诚实'的谐音梗，搞笑调侃对方说话要放大十倍才信。", source:"谐音梗文化", category:"社交", hotLevel:"🔥🔥🔥", usage:"朋友吹牛时：'你乘十说'"},
+  {id:'m17', name:"赛博丐帮", meaning:"自愿流浪的解压自嘲，形容在网络上到处蹭资源、白嫖的行为。", source:"网络自嘲文化", category:"社交", hotLevel:"🔥🔥🔥", usage:"到处求资源：'赛博丐帮帮主在此'"},
+  {id:'m18', name:"对不起老己", meaning:"向自己道歉，自我关怀的幽默表达。'老己'是'自己'的方言化。", source:"爱你老己衍生", category:"社交", hotLevel:"🔥🔥🔥", usage:"熬夜后：'对不起老己，又伤害你了'"},
+  {id:'m19', name:"无效社交", meaning:"没意义的应酬，去了不如不去的聚会。", source:"社交反思文化", category:"社交", hotLevel:"🔥🔥🔥🔥", usage:"婉拒饭局：'这是无效社交'"},
+  {id:'m20', name:"话题终结者", meaning:"一句话就能把天聊死的人，自带冷场气场。", source:"社交吐槽", category:"社交", hotLevel:"🔥🔥🔥", usage:"自嘲：'我就是话题终结者'"},
+  // ===== 生活日常 =====
+  {id:'m21', name:"干饭魂", meaning:"干饭人专属精神图腾，一到饭点就满血复活。", source:"美食文化", category:"生活", hotLevel:"🔥🔥🔥🔥", usage:"'干饭魂干饭人干饭都是人上人'"},
+  {id:'m22', name:"奶茶续命", meaning:"奶茶是快乐源泉，不喝会死。打工人的生命维持系统。", source:"奶茶文化", category:"生活", hotLevel:"🔥🔥🔥🔥🔥", usage:"下午3点：'需要奶茶续命'"},
+  {id:'m23', name:"熬夜冠军", meaning:"熬夜第一名，明知道不该熬但就是停不下来。", source:"夜猫子自嘲", category:"生活", hotLevel:"🔥🔥🔥🔥", usage:"凌晨2点：'又是熬夜冠军的一天'"},
+  {id:'m24', name:"电量焦虑", meaning:"手机电量低于50%就慌，低于20%就崩溃的现代病。", source:"数字生活焦虑", category:"生活", hotLevel:"🔥🔥🔥", usage:"到处找充电器：'电量焦虑发作了'"},
+  {id:'m25', name:"外卖自由", meaning:"点外卖不看价格想点啥点啥的财务自由初级阶段。", source:"消费文化", category:"生活", hotLevel:"🔥🔥🔥", usage:"'等我实现外卖自由就幸福了'"},
+  // ===== 经典百搭 =====
+  {id:'m26', name:"绝绝子", meaning:"太绝了、太棒了、太无语了。万能感叹词，褒贬皆可。", source:"饭圈文化出圈", category:"经典", hotLevel:"🔥🔥🔥🔥", usage:"看到好吃的：'绝绝子！'"},
+  {id:'m27', name:"YYDS", meaning:"永远的神。夸人夸物夸到极致的终极表达。", source:"电竞圈出圈", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"'这家店YYDS'"},
+  {id:'m28', name:"破防了", meaning:"情绪崩溃/被击中。可以是感动到哭，也可以是气到炸。", source:"游戏圈出圈", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"看催泪视频：'我破防了'"},
+  {id:'m29', name:"尊嘟假嘟", meaning:"真的假的。'真的'的可爱化发音，卖萌专用。", source:"可爱文化", category:"经典", hotLevel:"🔥🔥🔥🔥", usage:"听到好消息：'尊嘟假嘟'"},
+  {id:'m30', name:"谁懂啊", meaning:"强烈共鸣的表达，希望有人能理解自己的感受。", source:"社交媒体共鸣文化", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"'加班到凌晨，谁懂啊'"}
+];
+
 const TALENT_SOURCES = ["官网","官媒","公众号"];
 const TALENT_TOPICS = ["政策","人才活动","人才引进","人才生态"];
 const TALENT_TOPIC_COLORS = {
@@ -1132,6 +1241,7 @@ function bindEvents(){
   // 返回按钮
   document.getElementById('backFromNews').onclick = ()=> showApp('menu');
   document.getElementById('backFromTalent').onclick = ()=> showApp('menu');
+  document.getElementById('backFromMeme').onclick = ()=> showApp('menu');
 
   // 视图切换（newsApp内）
   document.querySelectorAll('#newsApp .view-tabs button').forEach(b=>{
@@ -1167,6 +1277,8 @@ function bindEvents(){
 
   // 人才文章按钮
   document.getElementById('talentKw').addEventListener('input', doTalentSearch);
+  // 热梗搜索
+  document.getElementById('memeKw').addEventListener('input', doMemeSearch);
   document.getElementById('talentReset').onclick = ()=>{
     document.getElementById('talentKw').value='';
     state.talentSource = 'all';
@@ -1187,15 +1299,18 @@ function bindEvents(){
    顶级导航：menu / news / talent
 ========================================================= */
 function showApp(name){
-  const map = {menu:'menuView', news:'newsApp', talent:'talentApp'};
+  const map = {menu:'menuView', news:'newsApp', talent:'talentApp', meme:'memeApp'};
   const target = map[name];
-  ['menuView','newsApp','talentApp'].forEach(id=>{
+  ['menuView','newsApp','talentApp','memeApp'].forEach(id=>{
     document.getElementById(id).style.display = (id===target) ? 'block' : 'none';
   });
   // 进入栏目时隐藏顶部标题，回主菜单时显示
   document.getElementById('appHeader').style.display = (name==='menu') ? 'block' : 'none';
   if(name==='talent'){
     setTimeout(()=>{ renderTalentChips(); doTalentSearch(); },30);
+  }
+  if(name==='meme'){
+    setTimeout(()=>{ renderMemeChips(); doMemeSearch(); },30);
   }
   if(name==='news'){
     setTimeout(()=>switchView('calendar'), 30);
@@ -1292,12 +1407,75 @@ function doTalentSearch(){
 }
 
 /* =========================================================
+   热梗渲染与筛选
+========================================================= */
+const MEME_CAT_COLORS = {
+  "爆款":"#E5D8DF", "职场":"#D7DEE2", "治愈":"#DDE2D7",
+  "社交":"#E5DCC8", "生活":"#DFE0D8", "经典":"#DCD8E0"
+};
+const MEME_CAT_TEXT = {
+  "爆款":"#7A5A6E", "职场":"#556270", "治愈":"#5E6E55",
+  "社交":"#7A6A55", "生活":"#5E6055", "经典":"#5A5570"
+};
+
+function renderMemeChips(){
+  const box = document.getElementById('memeCatChips');
+  box.querySelectorAll('.chip').forEach(el=>{
+    el.onclick = ()=>{
+      box.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+      el.classList.add('on');
+      state.memeCat = el.dataset.val;
+      doMemeSearch();
+    };
+  });
+}
+
+function doMemeSearch(){
+  const kw = document.getElementById('memeKw').value.trim().toLowerCase();
+  const cat = state.memeCat || 'all';
+  let results = MEME_DATA.slice();
+  if(cat!=='all') results = results.filter(m=>m.category===cat);
+  if(kw){
+    results = results.filter(m=>{
+      const hay = (m.name+' '+m.meaning+' '+m.usage).toLowerCase();
+      return hay.includes(kw);
+    });
+  }
+
+  const meta = document.getElementById('memeResultMeta');
+  meta.innerHTML = `共 <b>${results.length}</b> 个热梗 · 分类「${cat==='all'?'全部':cat}」`;
+
+  const list = document.getElementById('memeResults');
+  if(results.length===0){
+    list.innerHTML = `<div class="empty"><div class="icon">🔍</div>没找到这个梗<br><span style="font-size:12px">可能还没收录，换个词试试？</span></div>`;
+    return;
+  }
+  list.innerHTML = results.map(m=>{
+    const catColor = MEME_CAT_COLORS[m.category] || '#DCD8E0';
+    const catTxt = MEME_CAT_TEXT[m.category] || '#5A5570';
+    return `<div class="talent-card" data-id="${m.id}">
+      <div class="talent-meta">
+        <span class="talent-topic" style="background:${catColor};color:${catTxt}">${m.category}</span>
+        <span class="talent-date">${m.hotLevel}</span>
+      </div>
+      <div class="title">${m.name}</div>
+      <div class="summary">${m.meaning}</div>
+      <div class="talent-footer">
+        <span class="src-label">来源：${m.source}</span>
+        <span class="src-label" style="color:var(--hi2)">用法：${m.usage}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* =========================================================
    初始化
 ========================================================= */
 async function init(){
   state.talentSource = 'all';
   state.talentTopic = 'all';
   state.talentYear = 'all';
+  state.memeCat = 'all';
   loadData();
   renderHeader();
   renderCatChips();
