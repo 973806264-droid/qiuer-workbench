@@ -571,11 +571,11 @@ footer .refresh:hover{text-decoration:underline}
     <!-- 统计卡片 -->
     <div class="talent-stats">
       <div class="stat-item">
-        <div class="stat-num" id="memeStatTotal">38</div>
+        <div class="stat-num" id="memeStatTotal">51</div>
         <div class="stat-label">热梗总数</div>
       </div>
       <div class="stat-item">
-        <div class="stat-num">7</div>
+        <div class="stat-num">8</div>
         <div class="stat-label">分类</div>
       </div>
       <div class="stat-item">
@@ -598,7 +598,7 @@ footer .refresh:hover{text-decoration:underline}
         <span class="chip" data-val="职场">💼 打工人</span>
         <span class="chip" data-val="治愈">💚 情绪治愈</span>
         <span class="chip" data-val="社交">💬 社交聊天</span>
-        <span class="chip" data-val="生活">🍔 生活日常</span>
+        <span class="chip" data-val="7月新梗">🆕 7月新梗</span>
         <span class="chip" data-val="经典">⭐ 经典百搭</span>
       </div>
     </div>
@@ -1186,51 +1186,57 @@ const TALENT_ARTICLES = [
 ];
 
 const MEME_DATA = [
-  // ===== 形象/表情包梗（靠图片形象爆火）=====
-  {id:'m0a', name:"背手负鼠", meaning:"一只北美负鼠误闯民宅，被困窗边时双脚站立、两小爪背在身后、眼神放空。被'窝囊打工人'奉为精神图腾，2026年5月爆火，浏览量超8000万次。", source:"海外真实抓拍照片二创", category:"形象", hotLevel:"🔥🔥🔥🔥🔥", usage:"上班发呆时发负鼠图：'演我精神状态'", updateDate:"2026-05", url:"https://zhuanlan.zhihu.com/p/2043264200278005091"},
-  {id:'m0b', name:"哭哭马", meaning:"一匹委屈脸的马玩偶，丧萌自嘲专用。眼神委屈、嘴角下垂，完美演绎打工人的心酸。和'卡急马'并称马年双宝。", source:"马玩偶表情包出圈", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"被领导骂完发哭哭马图", updateDate:"2026-03", url:"https://www.weibo.com/ttarticle/p/show?id=2309405315839670223918"},
-  {id:'m0c', name:"奶绿波", meaning:"高速堵车时密集事物刷屏的梗。形容排队、堵车、消息刷屏等让人崩溃的密集场景，配奶茶绿色调图片。", source:"社交媒体堵车话题", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"堵在路上：'又是奶绿波的一天'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m0d', name:"养龙虾", meaning:"部署调教开源AI智能体OpenClaw的昵称，和吃夜宵的龙虾无关。形容在家养AI当宠物的新型数字生活。", source:"AI智能体OpenClaw出圈", category:"形象", hotLevel:"🔥🔥🔥🔥🔥", usage:"'今晚不加班，回家养龙虾'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7617831588080763434/"},
-  {id:'m0e', name:"人脸痞老板", meaning:"把痞老板（海绵宝宝角色）P成人脸的恐怖又搞笑图片，因太离谱而爆火。形容事情离谱到令人不适。", source:"海绵宝宝二创P图", category:"形象", hotLevel:"🔥🔥🔥", usage:"看到离谱新闻：'这比人脸痞老板还恐怖'", updateDate:"2026-04", url:"https://www.lingoace.com/zh/blog/internet-slang/"},
-  {id:'m0f', name:"卡急马", meaning:"哭哭马的暴躁版，卡住了又着急。形容deadline前焦虑又卡壳的状态。和哭哭马组成'马氏情绪系列'。", source:"哭哭马衍生二创", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"交稿前发卡急马图：'卡住了还急'", updateDate:"2026-04", url:"https://www.weibo.com/ttarticle/p/show?id=2309405315839670223918"},
-  {id:'m0g', name:"马彪彪", meaning:"山东美术馆文创马玩偶，周一状态专属表情包。眼神呆滞、精神萎靡，完美演绎周一上班的行尸走肉感。", source:"山东美术馆文创出圈", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"周一早上发马彪彪：'本日状态'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m0h', name:"雪山救狐", meaning:"以为救了只狐狸会报恩，结果是被抛弃的酱板鸭来复仇。形容'看似浪漫实则反转'的剧情。和酱板鸭梗联动。", source:"网络短视频剧情梗", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"期待落空时：'我又救了只酱板鸭'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
-  // ===== 顶流爆款 =====
-  {id:'m1', name:"酱板鸭", meaning:"你以为在演白狐报恩，结果是被抛弃的酱板鸭来索命。形容'看似浪漫实则复仇'的反转局面。", source:"网络短视频二创", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"朋友讲离谱倒霉事 → '所以你是那只酱板鸭？'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
-  {id:'m2', name:"咕咕嘎嘎", meaning:"不需要逻辑只需要快乐的魔性音频梗，像呆企鹅摇头晃脑。当代年轻人精神状态的写照。", source:"游戏角色二创魔性音频", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"群聊冷场时发一句'咕咕嘎嘎'化解尴尬", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
-  {id:'m3', name:"我的刀盾", meaning:"英文'What the dog doing'的魔性空耳，看到迷惑行为时的万能吐槽。配拿刀盾的狗子表情包。", source:"英文吐槽魔性发音+表情包", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"看到室友在宿舍跳舞 → 缓缓打出'我的刀盾'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
-  {id:'m4', name:"邪修", meaning:"用离谱方法解决生活难题。源自修真小说'不走正道'，演变为年轻人的发疯哲学。", source:"修真小说文化衍生", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"不想上班去公园看大爷下棋，美其名曰'吸收天地灵气'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
-  {id:'m5', name:"爱你老己", meaning:"方言版'爱你自己'，悦己经济的幽默版。游戏台词'爱你老妈'被魔改而来。", source:"游戏台词魔改", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"加班到深夜给自己点豪华外卖：'辛苦了老己'", updateDate:"2026-01", url:"https://www.toutiao.com/article/7602157862315377171/"},
-  // ===== 打工人 =====
-  {id:'m6', name:"精神离职", meaning:"人在工位，心已辞职。身体还在上班，灵魂已经自由。", source:"职场自嘲文化", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"周一早上坐在工位发呆时的精神状态", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m7', name:"班味", meaning:"上班久了自带的疲惫气质，洗不掉去不了。放假也满脑子工作叫'班味入脑'。", source:"社交媒体职场话题", category:"职场", hotLevel:"🔥🔥🔥🔥🔥", usage:"照镜子发现越来越像中年社畜", updateDate:"2026-02", url:"https://wenku.baidu.com/view/757ba6d8d4d233d4b14e852458fb770bf68a3b6e.html"},
-  {id:'m8', name:"摸鱼搭子", meaning:"一起摸鱼的同事，职场中最珍贵的革命友谊。", source:"打工人社交文化", category:"职场", hotLevel:"🔥🔥🔥", usage:"'走，去茶水间摸鱼搭子'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m9', name:"无效加班", meaning:"加班没产出，纯耗时间。领导不走谁也不敢走的职场潜规则。", source:"职场吐槽", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"晚上9点还在工位刷手机等领导走", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m10', name:"毛囊报警", meaning:"熬夜压力大导致发际线后移，身体发出的预警信号。", source:"年轻人健康焦虑", category:"职场", hotLevel:"🔥🔥🔥", usage:"梳头时看着掉发：'毛囊报警了'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  // ===== 情绪治愈 =====
-  {id:'m11', name:"允许一切发生", meaning:"与生活和解，接纳所有变数。拒绝内耗，拥抱不确定性。", source:"治愈系心理学流行", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"遇到挫折时默念：'允许一切发生'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2023515427817431155"},
-  {id:'m12', name:"人生旷野不是轨道", meaning:"拒绝被定义，人生没有标准答案。不是非得按部就班走轨道。", source:"治愈系文案", category:"治愈", hotLevel:"🔥🔥🔥🔥🔥", usage:"被问'什么时候结婚'时：'人生是旷野不是轨道'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2023515427817431155"},
-  {id:'m13', name:"电子布洛芬", meaning:"治愈坏心情的线上内容，看一眼就能止痛的暖心视频/图片。", source:"网络治愈文化", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"看猫咪视频缓解焦虑：'我的电子布洛芬'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m14', name:"活人感", meaning:"真实自然、不装不演。形容一个人有烟火气、接地气。", source:"社交媒体评价用语", category:"治愈", hotLevel:"🔥🔥🔥", usage:"夸人：'你很有活人感'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m15', name:"松弛人生", meaning:"不紧绷、不焦虑、不内卷的生活态度。2026年最流行的生活哲学。", source:"生活方式潮流", category:"治愈", hotLevel:"🔥🔥🔥🔥🔥", usage:"拒绝加班：'我要过松弛人生'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2023515427817431155"},
-  // ===== 社交聊天 =====
-  {id:'m16', name:"你乘十说", meaning:"'诚实'的谐音梗，搞笑调侃对方说话要放大十倍才信。", source:"谐音梗文化", category:"社交", hotLevel:"🔥🔥🔥", usage:"朋友吹牛时：'你乘十说'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m17', name:"赛博丐帮", meaning:"自愿流浪的解压自嘲，形容在网络上到处蹭资源、白嫖的行为。", source:"网络自嘲文化", category:"社交", hotLevel:"🔥🔥🔥", usage:"到处求资源：'赛博丐帮帮主在此'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m18', name:"对不起老己", meaning:"向自己道歉，自我关怀的幽默表达。'老己'是'自己'的方言化。", source:"爱你老己衍生", category:"社交", hotLevel:"🔥🔥🔥", usage:"熬夜后：'对不起老己，又伤害你了'", updateDate:"2026-02", url:"https://www.toutiao.com/article/7602157862315377171/"},
-  {id:'m19', name:"无效社交", meaning:"没意义的应酬，去了不如不去的聚会。", source:"社交反思文化", category:"社交", hotLevel:"🔥🔥🔥🔥", usage:"婉拒饭局：'这是无效社交'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m20', name:"话题终结者", meaning:"一句话就能把天聊死的人，自带冷场气场。", source:"社交吐槽", category:"社交", hotLevel:"🔥🔥🔥", usage:"自嘲：'我就是话题终结者'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  // ===== 生活日常 =====
-  {id:'m21', name:"干饭魂", meaning:"干饭人专属精神图腾，一到饭点就满血复活。", source:"美食文化", category:"生活", hotLevel:"🔥🔥🔥🔥", usage:"'干饭魂干饭人干饭都是人上人'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m22', name:"奶茶续命", meaning:"奶茶是快乐源泉，不喝会死。打工人的生命维持系统。", source:"奶茶文化", category:"生活", hotLevel:"🔥🔥🔥🔥🔥", usage:"下午3点：'需要奶茶续命'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m23', name:"熬夜冠军", meaning:"熬夜第一名，明知道不该熬但就是停不下来。", source:"夜猫子自嘲", category:"生活", hotLevel:"🔥🔥🔥🔥", usage:"凌晨2点：'又是熬夜冠军的一天'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m24', name:"电量焦虑", meaning:"手机电量低于50%就慌，低于20%就崩溃的现代病。", source:"数字生活焦虑", category:"生活", hotLevel:"🔥🔥🔥", usage:"到处找充电器：'电量焦虑发作了'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  {id:'m25', name:"外卖自由", meaning:"点外卖不看价格想点啥点啥的财务自由初级阶段。", source:"消费文化", category:"生活", hotLevel:"🔥🔥🔥", usage:"'等我实现外卖自由就幸福了'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
-  // ===== 经典百搭 =====
-  {id:'m26', name:"绝绝子", meaning:"太绝了、太棒了、太无语了。万能感叹词，褒贬皆可。", source:"饭圈文化出圈", category:"经典", hotLevel:"🔥🔥🔥🔥", usage:"看到好吃的：'绝绝子！'", updateDate:"2025", url:"https://www.lingoace.com/zh/blog/internet-slang/"},
-  {id:'m27', name:"YYDS", meaning:"永远的神。夸人夸物夸到极致的终极表达。", source:"电竞圈出圈", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"'这家店YYDS'", updateDate:"2025", url:"https://www.lingoace.com/zh/blog/internet-slang/"},
-  {id:'m28', name:"破防了", meaning:"情绪崩溃/被击中。可以是感动到哭，也可以是气到炸。", source:"游戏圈出圈", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"看催泪视频：'我破防了'", updateDate:"2025", url:"https://www.lingoace.com/zh/blog/internet-slang/"},
-  {id:'m29', name:"尊嘟假嘟", meaning:"真的假的。'真的'的可爱化发音，卖萌专用。", source:"可爱文化", category:"经典", hotLevel:"🔥🔥🔥🔥", usage:"听到好消息：'尊嘟假嘟'", updateDate:"2025", url:"https://www.lingoace.com/zh/blog/internet-slang/"},
-  {id:'m30', name:"谁懂啊", meaning:"强烈共鸣的表达，希望有人能理解自己的感受。", source:"社交媒体共鸣文化", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"'加班到凌晨，谁懂啊'", updateDate:"2025", url:"https://www.lingoace.com/zh/blog/internet-slang/"}
+  {id:'m0a', name:"背手负鼠", meaning:"一只北美负鼠误闯民宅被困窗边，双脚站立、两小爪背在身后、眼神放空。被'窝囊打工人'奉为精神图腾，2026年5月爆火，小红书相关话题浏览超8000万，B站单视频播放92万。", source:"海外真实抓拍照片二创", category:"形象", hotLevel:"🔥🔥🔥🔥🔥", usage:"上班发呆时发负鼠图：'虽然没挣钱，起码累着了'", updateDate:"2026-05", url:"https://news.qq.com/rain/a/20260528A02Y1P00"},
+  {id:'m0b', name:"哭哭马", meaning:"马年玩偶嘴巴缝反成委屈脸，眼神委屈、嘴角下垂，完美演绎打工人的心酸。丧萌自嘲专用，2026马年限定梗。", source:"马玩偶表情包出圈", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"被领导骂完发哭哭马图：'今天是哭哭马本马'", updateDate:"2026-02", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m0c', name:"马彪彪", meaning:"山东美术馆文创马玩偶，周一状态专属表情包。眼神呆滞、精神萎靡，完美演绎周一上班的行尸走肉感。", source:"山东美术馆文创出圈", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"周一早上发马彪彪：'本日状态'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
+  {id:'m0d', name:"小狗变海豹", meaning:"萨摩耶/比熊等长毛犬低头舔冰淇淋时，耳朵后贴、毛发蓬松，头型神似海豹幼崽。网友戏称'医学奇迹/返祖成海豹'，2026年4月萌宠圈出圈。", source:"萌宠博主视频出圈", category:"形象", hotLevel:"🔥🔥🔥🔥", usage:"晒狗吃冰淇淋：'小狗一吃冰淇淋，直接小海豹化'", updateDate:"2026-04", url:"https://www.toutiao.com/article/7631564360489484854/"},
+  {id:'m0e', name:"孙红雷连夜关闭人脸支付", meaning:"萌娃路边把孙红雷广告牌认成爸爸，对着喊'爸爸'。网友调侃'孙红雷再不关人脸支付，钱包要被冒牌货刷空了'。2026年4月短视频破亿播放。", source:"萌娃撞脸广告牌短视频", category:"形象", hotLevel:"🔥🔥🔥🔥🔥", usage:"调侃撞脸：'长得太大众，建议连夜关闭人脸支付'", updateDate:"2026-04", url:"https://www.toutiao.com/article/7631564360489484854/"},
+  {id:'m0f', name:"雪山救狐/酱板鸭复仇", meaning:"AI生成邵氏武侠短片：你在雪山上救了只狐狸→多年后美女上门报恩→反转：她是被抛弃的酱板鸭！魔性反转+低成本AI画质引发全民二创。", source:"AI生成短视频二创", category:"形象", hotLevel:"🔥🔥🔥🔥🔥", usage:"期待落空时：'我又救了只酱板鸭'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
+  {id:'m1', name:"酱板鸭", meaning:"你以为在演白狐报恩，结果是被抛弃的酱板鸭来索命。形容'看似浪漫实则复仇'的反转局面。和雪山救狐梗联动，2026上半年顶流。", source:"AI短视频二创出圈", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"朋友讲离谱倒霉事 → '所以你是那只酱板鸭？'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
+  {id:'m2', name:"咕咕嘎嘎", meaning:"游戏角色二创的魔性音频，像呆企鹅摇头晃脑喊'咕咕~嘎嘎！'。不需要逻辑只需要快乐，群聊冷场救星。", source:"游戏角色二创魔性音频", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"群聊冷场时发一句'咕咕嘎嘎'化解尴尬", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
+  {id:'m3', name:"我的刀盾", meaning:"英文'What the dog doing'的魔性空耳，配拿刀盾的狗子表情包。看到迷惑行为时的万能吐槽，2026上半年刷屏级热梗。", source:"英文吐槽魔性发音+表情包", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"看到室友在宿舍跳舞 → 缓缓打出'我的刀盾'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
+  {id:'m4', name:"邪修", meaning:"用离谱方法解决生活难题。源自修真小说'不走正道'，演变为年轻人的发疯哲学。'不想上班去公园看大爷下棋，美其名曰吸收天地灵气'。", source:"修真小说文化衍生", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"用打火机烧老干妈盖子 → '邪修行为'", updateDate:"2026-04", url:"https://zhuanlan.zhihu.com/p/2028204229718746593"},
+  {id:'m5', name:"爱你老己", meaning:"方言版'爱你自己'，游戏台词'爱你老妈'被魔改。2026开年最温柔的热梗，把抽象的自我变成了亲切的老己，多了几分烟火气的温柔。", source:"游戏台词魔改", category:"爆款", hotLevel:"🔥🔥🔥🔥🔥", usage:"加班到深夜给自己点豪华外卖：'辛苦了老己'", updateDate:"2026-01", url:"https://www.toutiao.com/article/7602157862315377171/"},
+  {id:'m6', name:"夯爆了", meaning:"2026年万能夸赞词，形容场面震撼、效果极佳、精彩度拉满。比yyds更接地气，全场景友好，老人小孩都能懂。", source:"全网流行正向热词", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"'这顿饭夯爆了'、'你今天状态夯爆了'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2023515427817431155"},
+  {id:'m7', name:"不要鸡腿（人工鸡能）", meaning:"网友点麦当劳板烧鸡腿堡备注'不要酱'手滑打成'不要鸡腿'，商家严格执行送来空堡。衍生'人鸡交互''人工鸡能'等谐音梗，2026年4月全网刷屏。", source:"网友点餐乌龙事件", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"自嘲手滑/失误：'我这操作真是不要鸡腿了'", updateDate:"2026-04", url:"https://www.toutiao.com/article/7631564360489484854/"},
+  {id:'m8', name:"入魅", meaning:"脱离传统贬义，变成年轻人对热爱最极致的表达。'最近彻底入魅了'——为养一盆多肉每天精心浇水，为学好剪辑熬夜看教程，都是入魅。", source:"社交平台流行语", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"'最近彻底入魅了，为这件事入魅一辈子'", updateDate:"2026-02", url:"https://www.toutiao.com/article/7602157862315377171/"},
+  {id:'m9', name:"地球online 2.0", meaning:"把现实生活比作正在升级的网络游戏，源自马斯克'人类活在真实世界概率极低'言论。'今日份地球online闯关失败，明天继续'。", source:"马斯克言论衍生", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"遇到挫折：'地球online 2.0版本已更新，bug仍在修复中'", updateDate:"2026-02", url:"https://www.toutiao.com/article/7602157862315377171/"},
+  {id:'m10', name:"男人花期短", meaning:"'男人的花期大概就是18到22岁，过了22岁直接从校草变成大叔'。用幽默解构颜值焦虑，引发百万网友共鸣。", source:"社交平台搞笑对比图", category:"爆款", hotLevel:"🔥🔥🔥🔥", usage:"看到朋友发福：'都说男人花期短，没想到这么短'", updateDate:"2026-02", url:"https://www.toutiao.com/article/7602157862315377171/"},
+  {id:'m11', name:"精神离职", meaning:"人还在工位坐着，身体维持工作状态，内心早已'辞职'，灵魂在度假。当代打工人的佛系职场状态。", source:"职场自嘲文化", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"'周一到周五主打一个精神离职，身体上班灵魂躺平'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
+  {id:'m12', name:"努力通胀", meaning:"内卷环境下投入的努力越来越多，却只能换来持平甚至更低的收益，如同努力遭遇了'通货膨胀'。", source:"职场反思文化", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"'天天加班到深夜，工资一分没涨，这就是努力通胀'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m13', name:"会议黑洞", meaning:"冗长、低效、无实质产出的会议，像黑洞一样吞噬打工人的时间、精力和创造力。", source:"职场吐槽", category:"职场", hotLevel:"🔥🔥🔥", usage:"'一下午开了三个会议黑洞，啥也没解决'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m14', name:"工位坐禅", meaning:"上班时表面安静专注，实则内心平静放空，看似认真工作实则在佛系摸鱼。打工人的低调摸鱼方式。", source:"职场自嘲文化", category:"职场", hotLevel:"🔥🔥🔥", usage:"'上班主打工位坐禅，表面认真工作内心早已放飞'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m15', name:"摸鱼搭子", meaning:"一起带薪摸鱼、刷手机、唠嗑、点奶茶的同事，主打上班路上的神仙陪伴。", source:"打工人社交文化", category:"职场", hotLevel:"🔥🔥🔥", usage:"'我的摸鱼搭子今天请假，上班瞬间没了乐趣'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
+  {id:'m16', name:"已到工位消息秒回", meaning:"2026年7月爆火的打工人表情包。有人分享坚持3年每天到工位后发一条'已到工位消息秒回'状态，戳中千万打工人共鸣，微博话题阅读量破亿。", source:"微博打工人状态分享", category:"职场", hotLevel:"🔥🔥🔥🔥🔥", usage:"到工位后发状态：'已到工位，消息秒回（并不会）'", updateDate:"2026-07", url:"https://cj.sina.com.cn/articles/view/7879776328/1d5abd84806801u75c"},
+  {id:'m17', name:"数字实习生", meaning:"比喻AI工具像一个永远不喊累、不要工资、但偶尔犯离谱错误的实习生。你把活交给它，它做得飞快，但你必须再审一遍。", source:"AI工具普及职场文化", category:"职场", hotLevel:"🔥🔥🔥🔥", usage:"'让数字实习生写方案，前两页惊艳第三页把客户名写成甲方爸爸'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m18', name:"AI没班上", meaning:"反讽AI能干但不让你下岗的荒诞时刻。AI写了代码领导说'不行让小王再写一遍'，AI画了图甲方说'不够人工气'。", source:"企业引入AI后的荒诞现象", category:"职场", hotLevel:"🔥🔥🔥", usage:"'AI写好了周报领导让我手抄一遍——AI没班上，是我在帮AI上班'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m19', name:"允许一切发生", meaning:"与生活和解，接纳所有变数。拒绝内耗，拥抱不确定性。2026年治愈系代表作。", source:"治愈系心理学流行", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"遇到挫折时默念：'允许一切发生'", updateDate:"2026-02", url:"https://zhuanlan.zhihu.com/p/2023515427817431155"},
+  {id:'m20', name:"人生旷野不是轨道", meaning:"拒绝被定义，人生没有标准答案，不是非得按部就班走轨道。", source:"治愈系文案", category:"治愈", hotLevel:"🔥🔥🔥🔥🔥", usage:"被问'什么时候结婚'：'人生是旷野不是轨道'", updateDate:"2026-01", url:"https://zhuanlan.zhihu.com/p/2023515427817431155"},
+  {id:'m21', name:"电子布洛芬", meaning:"治愈坏心情的线上内容，看一眼就能止痛的暖心视频/图片。", source:"网络治愈文化", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"看猫咪视频缓解焦虑：'我的电子布洛芬'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
+  {id:'m22', name:"活人感", meaning:"真实自然、不刻意伪装、充满烟火气息的状态。拒绝千篇一律的完美人设和预制生活。", source:"社交媒体评价用语", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"'比起精致的网红感，我更喜欢你身上的活人感'", updateDate:"2026-04", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m23', name:"蒜鸟蒜鸟", meaning:"谐音'算了算了'，佛系释怀梗。不纠结、不内耗、不较真，遇到烦心事一笑而过。", source:"谐音梗文化", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"'一点小事而已，蒜鸟蒜鸟，没必要生气'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m24', name:"放过自己券", meaning:"自己发给自己的免责券——今天不卷了、不学了、不焦虑了。使用方法：对自己说'我发一张放过自己券'，然后心安理得地躺着。", source:"心理咨询师社媒建议出圈", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"'今天太累了，我发一张放过自己券，今晚不学习了'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m25', name:"废话疗愈", meaning:"和朋友进行毫无信息量但极度舒适的对话，不解决问题只提供陪伴。'我今天吃了火锅''我也想吃'——但聊完心情确实变好了。", source:"年轻人社交流行词", category:"治愈", hotLevel:"🔥🔥🔥", usage:"'在吗？来个废话疗愈，15分钟纯废话不解决问题'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m26', name:"人生只是支线", meaning:"把人生当成大型开放世界游戏，工作、婚姻、社交都只是支线任务，不做也不影响通关。核心任务是'活着就行'。", source:"开放世界游戏文化衍生", category:"治愈", hotLevel:"🔥🔥🔥🔥", usage:"'升职是支线，结婚是支线，主线只有一个：今天好好吃饭'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m27', name:"你乘十说", meaning:"'诚实'的谐音梗，搞笑调侃对方说话要放大十倍才信。", source:"谐音梗文化", category:"社交", hotLevel:"🔥🔥🔥", usage:"朋友吹牛时：'你乘十说'", updateDate:"2026-03", url:"https://zhuanlan.zhihu.com/p/2025142253308397369"},
+  {id:'m28', name:"你人还怪好嘞", meaning:"幽默式夸赞，表达对他人热心、友善行为的认可，语气俏皮，比直白的谢谢更有网感。", source:"社交平台流行语", category:"社交", hotLevel:"🔥🔥🔥🔥", usage:"'还特意帮我带了早餐，你人还怪好嘞'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m29', name:"别太荒谬", meaning:"全网通用吐槽梗，不是真生气，主打搞笑调侃，语气轻松不尖锐。", source:"社交吐槽文化", category:"社交", hotLevel:"🔥🔥🔥🔥", usage:"'这操作别太荒谬了，我真的看不懂'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m30', name:"主打一个", meaning:"万能百搭句式，加在任何行为、态度前瞬间提升网感，强调核心状态。", source:"网络句式流行", category:"社交", hotLevel:"🔥🔥🔥🔥🔥", usage:"'当代年轻人出行，主打一个随性自在'", updateDate:"2026-02", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m31', name:"想跑路可以直说", meaning:"演员田曦薇回复粉丝'不再依赖姐姐算长大吗'时调侃'想跑路可以直说'，后衍生为HR怼离职员工专用话术。", source:"明星回复粉丝出圈", category:"社交", hotLevel:"🔥🔥🔥🔥", usage:"同事提离职：'想跑路可以直说'", updateDate:"2026-04", url:"https://www.toutiao.com/article/7631564360489484854/"},
+  {id:'m32', name:"电子下酒菜", meaning:"喝酒时配的短视频/老剧（武林外传、老友记）/直播，无实体食物，主打仪式感。衍生'精准搭子/情绪搭子'。", source:"社交平台流行", category:"社交", hotLevel:"🔥🔥🔥", usage:"'今晚喝点，求推荐电子下酒菜'", updateDate:"2026-04", url:"https://www.toutiao.com/article/7631564360489484854/"},
+  {id:'m33', name:"亲友垃圾互寄", meaning:"互相邮寄家里的美丽废物（闲置小玩意、退坑物料），看似寄垃圾实则分享审美与回忆，是断舍离的赛博升级版。", source:"年轻人社交新方式", category:"社交", hotLevel:"🔥🔥🔥", usage:"'和闺蜜天天亲友垃圾互寄，交换美丽废物'", updateDate:"2026-03", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m34', name:"48队的含金量", meaning:"吐槽世界杯扩军到48队后'什么队都能来'，小组赛质量参差不齐。引申为吐槽任何'门槛降低、鱼龙混杂'的场景。", source:"2026美加墨世界杯扩军", category:"7月新梗", hotLevel:"🔥🔥🔥🔥🔥", usage:"吐槽烂片：'这电影能上映，48队的含金量还在上升'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m35', name:"VAR改命", meaning:"原指世界杯关键判罚依赖VAR回放，引申为生活中'被复盘推翻'的命运时刻。本来要升职了，领导看了去年绩效——VAR改命，直接黄了。", source:"世界杯VAR判罚衍生", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"'前任来找我复合，我看了聊天记录—VAR改命，再见'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m36', name:"决赛圈的草皮", meaning:"自嘲连凑数的资格都没有，比炮灰更卑微、比陪跑更心酸。源自多支实力悬殊球队被戏称'为决赛圈草皮做贡献'。", source:"世界杯弱队自嘲衍生", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"'1270万毕业生，我就是决赛圈的草皮，衬个场面'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m37', name:"毕业即系统更新", meaning:"从校园到社会的巨大切换就像手机从iOS校园版强制更新到iOS社会版——界面全变了，以前的应用全不兼容了，bug层出不穷。", source:"毕业季社媒热词", category:"7月新梗", hotLevel:"🔥🔥🔥🔥🔥", usage:"'上班第一天就发现—毕业即系统更新，以前学的全废了'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m38', name:"offer等雨来", meaning:"用'等雨来'替代'等offer'，带着一种急也没用不如躺平的豁达，暗含对就业市场冷淡的无奈。", source:"2026届毕业生求职自嘲", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"'投了200份简历，现在是offer等雨来模式'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m39', name:"考公特种兵", meaning:"为考公上岸进行自杀式备考的年轻人——一天跑三个城市参加不同省份考试，行李箱比旅游博主还大。社交平台话题阅读量超20亿。", source:"2026国考省考竞争激烈", category:"7月新梗", hotLevel:"🔥🔥🔥🔥🔥", usage:"'七月考公特种兵已上线，本周行程：周一山东周三江苏周六广东'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m40', name:"蒸笼city", meaning:"'city不city'的夏季进化版，形容所在城市变成巨大蒸笼，出门=被蒸。7月初郑州武汉南京极端高温时出圈。", source:"高温天气+city梗结合", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"'今天这个天气，蒸笼city，very city'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m41', name:"反特种兵旅游", meaning:"与去年流行的特种兵旅游（一天打卡10个景点）相反——一天只做一件事，做完就回酒店躺。'假期不是用来完成KPI的'。", source:"年轻人反思旅行内卷", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"'这次暑假主打反特种兵——一天一个地方到点就收工'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m42', name:"prompt焦虑", meaning:"不会写AI提示词导致的就业焦虑、社交焦虑。当'你会不会写prompt'变成新职场竞争力，不会的人感觉自己像不会用电脑的上一代人。", source:"AI技能成招聘要求", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"'面试官问我会写prompt吗，表情比考六级还慌'", updateDate:"2026-07", url:"https://www.toutiao.com/article/7657800477966467620/"},
+  {id:'m43', name:"杜顶赫", meaning:"沈梦辰在综艺中见到偶像张凌赫激动，丈夫杜海涛吃醋改微博名为'杜顶赫'加入争宠。夫妻趣味互动出圈，累计阅读超10亿。", source:"杜海涛沈梦辰综艺互动", category:"7月新梗", hotLevel:"🔥🔥🔥🔥", usage:"调侃吃醋争宠：'你也是杜顶赫本赫了'", updateDate:"2026-07", url:"https://ent.sina.cn/2026-07-01/detail-iniffumn3191023.d.html"},
+  {id:'m44', name:"谁懂啊", meaning:"强烈共鸣的表达，希望有人能理解自己的感受。万能社交开场白。", source:"社交媒体共鸣文化", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"'加班到凌晨，谁懂啊'", updateDate:"2025", url:"https://www.toutiao.com/article/7619509212209349158/"},
+  {id:'m45', name:"破防了", meaning:"情绪崩溃/被击中。可以是感动到哭，也可以是气到炸。", source:"游戏圈出圈", category:"经典", hotLevel:"🔥🔥🔥🔥🔥", usage:"看催泪视频：'我破防了'", updateDate:"2025", url:"https://www.toutiao.com/article/7619509212209349158/"},
 ];
 
 const TALENT_SOURCES = ["官网","官媒","公众号"];
@@ -1426,11 +1432,11 @@ function doTalentSearch(){
 ========================================================= */
 const MEME_CAT_COLORS = {
   "形象":"#E8DCC8", "爆款":"#E5D8DF", "职场":"#D7DEE2", "治愈":"#DDE2D7",
-  "社交":"#E5DCC8", "生活":"#DFE0D8", "经典":"#DCD8E0"
+  "社交":"#E5DCC8", "7月新梗":"#D8DCE5", "经典":"#DCD8E0"
 };
 const MEME_CAT_TEXT = {
   "形象":"#7A6A45", "爆款":"#7A5A6E", "职场":"#556270", "治愈":"#5E6E55",
-  "社交":"#7A6A55", "生活":"#5E6055", "经典":"#5A5570"
+  "社交":"#7A6A55", "7月新梗":"#555A70", "经典":"#5A5570"
 };
 
 function renderMemeChips(){
