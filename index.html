@@ -45,6 +45,7 @@ body::before{
 .app{position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:24px 20px 60px}
 
 /* ===== 主菜单卡片 ===== */
+.toolbar-compact{padding:10px 14px; margin-bottom:14px}
 .menu-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:18px; margin-top:20px}
 .menu-card{
   background:linear-gradient(135deg, #FFFFFF, #F5F7FA);
@@ -317,34 +318,18 @@ footer .refresh:hover{text-decoration:underline}
       <button class="btn-back" id="backFromNews">← 返回工作台</button>
     </div>
 
-    <!-- 工具栏 -->
-    <div class="toolbar">
-      <div class="field" style="flex:2; min-width:180px">
-        <label>关键词搜索</label>
-        <input type="text" id="kwInput" placeholder="搜索标题与摘要…">
-      </div>
-      <div class="field">
-        <label>起始日期</label>
-        <input type="date" id="fromDate">
-      </div>
-      <div class="field">
-        <label>结束日期</label>
-        <input type="date" id="toDate">
-      </div>
+    <!-- 工具栏（仅分类筛选） -->
+    <div class="toolbar toolbar-compact">
       <div class="field" style="flex:1; min-width:200px">
         <label>分类筛选</label>
         <div class="cat-chips" id="catChips"></div>
-      </div>
-      <div class="btns">
-        <button class="btn ghost" id="resetBtn">重置</button>
-        <button class="btn hi" id="searchBtn">查询</button>
       </div>
     </div>
 
     <!-- 视图切换 -->
     <div class="view-tabs">
       <button data-view="calendar" class="active">📅 日历视图</button>
-      <button data-view="search">🔎 查询结果</button>
+      <button data-view="search">🔎 按分类查看</button>
     </div>
 
     <!-- 日历视图 -->
@@ -626,6 +611,7 @@ function renderCatChips(){
       if(state.selectedCats.has(c)) state.selectedCats.delete(c);
       else state.selectedCats.add(c);
       el.classList.toggle('on');
+      doSearch();
     };
     box.appendChild(el);
   });
@@ -773,30 +759,19 @@ function renderNewsPanel(dateStr){
    查询功能
 ========================================================= */
 function doSearch(){
-  const kw = document.getElementById('kwInput').value.trim().toLowerCase();
-  const from = document.getElementById('fromDate').value;
-  const to = document.getElementById('toDate').value;
   const cats = state.selectedCats;
-
   let results = [];
   Object.keys(state.data).forEach(date=>{
-    if(from && date < from) return;
-    if(to && date > to) return;
     (state.data[date]||[]).forEach(n=>{
       if(cats.size>0 && !cats.has(n.category)) return;
-      if(kw){
-        const hay = (n.title + ' ' + n.summary + ' ' + n.source).toLowerCase();
-        if(!hay.includes(kw)) return;
-      }
       results.push({...n, date});
     });
   });
   results.sort((a,b)=> (b.date > a.date ? 1 : -1) || (a.rank - b.rank));
 
-  // 切换到查询视图
   switchView('search');
   const meta = document.getElementById('resultMeta');
-  meta.innerHTML = `查询到 <b>${results.length}</b> 条结果 · 关键词「${kw||'无'}」· 分类「${cats.size?[...cats].join('/'):'全部'}」· 日期「${from||'不限'} ~ ${to||'不限'}」`;
+  meta.innerHTML = `共 <b>${results.length}</b> 条 · 分类「${cats.size?[...cats].join('/'):'全部'}」`;
 
   const list = document.getElementById('searchResults');
   if(results.length===0){
@@ -861,78 +836,78 @@ const TALENT_ARTICLES = [
   // ===== 2026年 =====
   {id:'t1', title:"《求是》杂志发表习近平总书记重要文章《一体推进教育科技人才发展》",
    summary:"2026年6月15日《求是》发表习近平重要文章，强调增强系统观念，坚持教育优先发展、科技自立自强、人才引领驱动，统筹推进教育科技人才体制机制一体改革，形成推动高质量发展的倍增效应。",
-   source:"新华网", sourceType:"官媒", topic:"讲话精神",
+   source:"新华网", sourceType:"官媒", topic:"政策",
    publishDate:"2026-06-15", url:"https://news.cri.cn/20260615/89b394a3-444a-41d5-8ab9-100fa1684dad.html"},
   {id:'t2', title:"以体制机制改革激发人才创新创造活力",
    summary:"2026年6月16日《求是》文章，深入阐释党的十八大以来习近平总书记关于人才发展体制机制改革的重要论述，围绕'聚天下英才而用之'提出新时代人才工作的总体要求和重点任务。",
-   source:"求是网", sourceType:"官网", topic:"评论解读",
+   source:"求是网", sourceType:"官网", topic:"人才生态",
    publishDate:"2026-06-16", url:"https://www.qstheory.cn/20260615/5fe2c45056144c47b0851ea75946aaf9/c.html"},
   {id:'t3', title:"聚天下英才 创复兴伟业——人才强国建设为中国式现代化提供有力支撑",
    summary:"新时代以来，我国深入实施人才强国战略，加快建设国家高水平人才高地，推动创新链、产业链、资金链、人才链深度融合，让各类人才在服务国家发展大局中各得其所、各展其长。",
-   source:"中国政府网", sourceType:"官网", topic:"实践探索",
+   source:"中国政府网", sourceType:"官网", topic:"人才生态",
    publishDate:"2026-05-15", url:"https://www.gov.cn/yaowen/liebiao/202605/content_7068944.htm"},
   {id:'t4', title:"瞭望·第一学习｜新时代人才强国战略的战略考量与实践路径",
    summary:"从'人才优先发展'到'人才引领发展'，从'加快建设人才强国'到'深入实施新时代人才强国战略'，回顾新时代人才工作的战略演变与下一阶段重点部署。",
-   source:"新华网", sourceType:"官媒", topic:"评论解读",
+   source:"新华网", sourceType:"官媒", topic:"人才生态",
    publishDate:"2025-04-28", url:"https://www.news.cn/politics/leaders/20250428/53964dd32a594f16b8f82c97587a11e4/c.html"},
   {id:'t5', title:"支持青年科技人才挑大梁、当主角",
    summary:"教育、科技、人才是全面建设社会主义现代化国家的基础性、战略性支撑。青年科技人才是我国科技创新发展的生力军，要完善青年科技人才发现、培养、激励机制，让青年人才在重大科技任务中挑大梁、当主角。",
-   source:"人民网·理论", sourceType:"官媒", topic:"实践探索",
+   source:"人民网·理论", sourceType:"官媒", topic:"人才引进",
    publishDate:"2025-02-24", url:"http://theory.people.com.cn/n1/2025/0224/c40531-40424234.html"},
   // ===== 2025年 =====
   {id:'t6', title:"为高质量发展夯实人才根基",
    summary:"习近平总书记指出，'要按照发展新质生产力要求，畅通教育、科技、人才的良性循环'。'十五五'时期，需一体推进教育科技人才发展，加快建设世界重要人才中心和创新高地。",
-   source:"人民网·理论", sourceType:"官媒", topic:"讲话精神",
+   source:"人民网·理论", sourceType:"官媒", topic:"人才生态",
    publishDate:"2025-11-30", url:"http://theory.people.com.cn/n1/2025/1130/c40531-40614247.html"},
   {id:'t7', title:"奏响高质量发展的人才强音——'十四五'时期我国人才工作综述",
    summary:"'十四五'规划即将收官，人才工作如期交出圆满答卷。五年来，人社部门以人力资源开发利用为主线，持续深化人才发展体制机制改革，人才队伍规模、质量、结构同步提升。",
-   source:"人社部·中国就业网", sourceType:"官网", topic:"实践探索",
+   source:"人社部·中国就业网", sourceType:"官网", topic:"人才活动",
    publishDate:"2025-10-21", url:"https://chinajob.mohrss.gov.cn/c/2025-10-21/456506.shtml"},
   {id:'t8', title:"强化中国式现代化的人才支撑",
    summary:"始终坚持以习近平总书记关于做好新时代人才工作的重要思想为根本遵循，奋力推动丰富人才资源优势更加彰显，一个又一个创新高地拔节生长。",
-   source:"中国青年网", sourceType:"官媒", topic:"讲话精神",
+   source:"中国青年网", sourceType:"官媒", topic:"人才生态",
    publishDate:"2025-10-18", url:"https://qnzs.youth.cn/tsxq/202510/t20251018_16297603.htm"},
   {id:'t9', title:"'十五五'人才发展规划：以深化改革推动人才高质量发展",
    summary:"围绕'十五五'人才发展，专家深入解读如何通过深化人才发展体制机制改革，推动人才高质量发展，加快建设国家战略人才力量，为中国式现代化提供有力人才支撑。",
-   source:"人民论坛网", sourceType:"官媒", topic:"评论解读",
+   source:"人民论坛网", sourceType:"官媒", topic:"政策",
    publishDate:"2025-09-01", url:"https://paper.people.com.cn/rmlt/pc/content/202509/01/content_30104678.html"},
   {id:'t10', title:"一体推进教育科技人才发展 加快实现高水平科技自立自强",
    summary:"党的二十届四中全会对未来5年发展作出顶层设计和战略擘画，对一体推进教育科技人才发展作出专门部署。要认真学习领会习近平总书记系列重要论述，进一步统一思想、凝聚共识。",
-   source:"中国青年网·评论", sourceType:"官媒", topic:"讲话精神",
+   source:"中国青年网·评论", sourceType:"官媒", topic:"政策",
    publishDate:"2025-12-26", url:"https://pinglun.youth.cn/ll/202512/t20251226_16430719.htm"},
   {id:'t11', title:"为建设教育强国、科技强国、人才强国贡献力量",
    summary:"2025年全国两会期间，代表委员热议习近平总书记关于教育强国、科技强国、人才强国的重要论述，强调必须坚持正确办学方向，培养德智体美劳全面发展的社会主义建设者和接班人。",
-   source:"人民网·两会", sourceType:"官媒", topic:"讲话精神",
+   source:"人民网·两会", sourceType:"官媒", topic:"人才生态",
    publishDate:"2025-03-08", url:"http://lianghui.people.com.cn/2025/n1/2025/0308/c460142-40433848.html"},
   {id:'t12', title:"汇聚高层次人才力量 激发创新创造活力",
    summary:"2025年全国两会e评：高层次人才工作将持续受到各方关注。我们期待人才评价体系改革取得更大突破，进一步破除'四唯'，让各类人才在创新创造的广阔舞台上各尽其才。",
-   source:"人民网·e评", sourceType:"官媒", topic:"评论解读",
+   source:"人民网·e评", sourceType:"官媒", topic:"人才引进",
    publishDate:"2025-03-04", url:"http://lianghui.people.com.cn/2025/n1/2025/0304/c460142-40430129.html"},
   {id:'t13', title:"以高质量人才工作推进人才强国战略",
    summary:"党的二十大进一步对深入实施人才强国战略、加快建设人才强国作出战略部署，明确提出'加快建设世界重要人才中心和创新高地，促进人才区域合理布局和协调发展'的战略目标。",
-   source:"云南理论网", sourceType:"官媒", topic:"评论解读",
+   source:"云南理论网", sourceType:"官媒", topic:"人才生态",
    publishDate:"2024-07-26", url:"https://llw.yunnan.cn/system/2024/07/26/033160241.shtml"},
   // ===== 2024年 =====
   {id:'t14', title:"中组部、人社部印发《关于进一步做好事业单位公开招聘工作的通知》",
    summary:"近日，中央组织部、人力资源社会保障部印发《关于进一步做好事业单位公开招聘工作的通知》，对规范事业单位招聘工作、引导人才向基层一线流动等作出部署。",
-   source:"中国青年报·中青在线", sourceType:"官网", topic:"政策文件",
+   source:"中国青年报·中青在线", sourceType:"官网", topic:"政策",
    publishDate:"2024-09-05", url:"http://m.cyol.com/gb/articles/2024-09/05/content_qbGdB0Fpe6.html"},
   {id:'t15', title:"九部门印发《加快数字人才培育支撑数字经济发展行动方案》",
    summary:"人社部、中组部、中央网信办、国家发改委等9部门联合印发行动方案，发挥数字人才支撑数字经济的基础性作用，加快推动形成新质生产力，为高质量发展提供人才支撑。",
-   source:"工人日报", sourceType:"官媒", topic:"政策文件",
+   source:"工人日报", sourceType:"官媒", topic:"人才引进",
    publishDate:"2024-04-17", url:"https://www.workercn.cn/c/2024-04-18/8225652.shtml"},
   {id:'t16', title:"为全面推进强国建设、民族复兴伟业提供有力人才支撑",
    summary:"习近平总书记关于做好新时代人才工作的重要思想，是习近平新时代中国特色社会主义思想的重要组成部分，是我们党对人才事业发展规律认识的最新成果，为新时代人才工作提供了根本遵循。",
-   source:"求是网", sourceType:"官网", topic:"讲话精神",
+   source:"求是网", sourceType:"官网", topic:"人才生态",
    publishDate:"2024-05-17", url:"https://www.qstheory.cn/qshyjx/2024-05/17/c_1130146996.htm"},
   {id:'t17', title:"做好新时代人才工作的根本遵循和行动指南",
    summary:"党的十八大以来，习近平总书记围绕人才工作发表的一系列重要论述，立意高远、内涵丰富、思想深刻，是我们党对人才事业发展规律认识的最新成果，是新时代人才工作的根本遵循和行动指南。",
-   source:"求是网", sourceType:"官网", topic:"讲话精神",
+   source:"求是网", sourceType:"官网", topic:"人才生态",
    publishDate:"2024-06-13", url:"https://www.qstheory.cn/qshyjx/2024-06/13/c_1130162350.htm"}
 ];
 
 const TALENT_SOURCES = ["官网","官媒","公众号"];
-const TALENT_TOPICS = ["政策文件","讲话精神","实践探索","评论解读"];
+const TALENT_TOPICS = ["政策","人才活动","人才引进","人才生态"];
 
 /* =========================================================
    事件绑定
@@ -972,19 +947,11 @@ function bindEvents(){
     renderNewsPanel(state.selectedDate);
   };
 
-  document.getElementById('searchBtn').onclick = doSearch;
-  document.getElementById('kwInput').addEventListener('keydown', e=>{
-    if(e.key==='Enter') doSearch();
-  });
-  document.getElementById('resetBtn').onclick = ()=>{
-    document.getElementById('kwInput').value='';
-    document.getElementById('fromDate').value='';
-    document.getElementById('toDate').value='';
+  document.getElementById('resetBtn') && (document.getElementById('resetBtn').onclick = ()=>{
     state.selectedCats.clear();
     document.querySelectorAll('#catChips .chip').forEach(c=>c.classList.remove('on'));
     switchView('calendar');
-    toast('已重置查询条件');
-  };
+  });
 
   // 人才文章按钮
   document.getElementById('talentSearch').onclick = doTalentSearch;
