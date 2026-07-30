@@ -4,42 +4,51 @@
       <stop offset="0%" stop-color="#EDF0F3"/>
       <stop offset="100%" stop-color="#D5DFE8"/>
     </linearGradient>
-    <linearGradient id="card1" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF"/>
-      <stop offset="100%" stop-color="#F5F7FA"/>
-    </linearGradient>
   </defs>
   <!-- 圆角背景 -->
   <rect width="512" height="512" rx="112" fill="url(#bg)"/>
-  <!-- 装饰圆点 -->
-  <circle cx="100" cy="100" r="14" fill="#7B9BAA" opacity="0.5"/>
-  <circle cx="420" cy="90" r="10" fill="#5B8FA8" opacity="0.45"/>
-  <circle cx="430" cy="420" r="16" fill="#B8CDE0" opacity="0.6"/>
-  <circle cx="80" cy="430" r="12" fill="#C5D4DE" opacity="0.6"/>
 
-  <!-- 三张错落的新闻卡片 -->
-  <!-- 底层卡片 -->
-  <rect x="130" y="165" width="260" height="150" rx="22" fill="url(#card1)" stroke="#7B9BAA" stroke-width="4"/>
-  <rect x="155" y="190" width="120" height="10" rx="5" fill="#7B9BAA"/>
-  <rect x="155" y="210" width="200" height="7" rx="3.5" fill="#D8DFE6"/>
-  <rect x="155" y="226" width="180" height="7" rx="3.5" fill="#D8DFE6"/>
-  <rect x="155" y="252" width="50" height="16" rx="8" fill="#7B9BAA"/>
+  <!-- 线条小狗 - 简笔画风格 -->
+  <g fill="none" stroke="#4A7A93" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 头部轮廓 -->
+    <path d="M 180 200 Q 180 160, 210 150 Q 235 142, 260 155 Q 285 145, 305 165 Q 318 185, 315 210"/>
+    <!-- 左耳（下垂） -->
+    <path d="M 195 165 Q 178 170, 172 195 Q 170 215, 180 230 Q 190 235, 200 225"/>
+    <!-- 右耳（下垂） -->
+    <path d="M 300 170 Q 320 175, 328 200 Q 330 220, 320 235 Q 310 240, 300 230"/>
+    <!-- 眼睛左 -->
+    <circle cx="225" cy="195" r="5" fill="#4A7A93"/>
+    <!-- 眼睛右 -->
+    <circle cx="275" cy="195" r="5" fill="#4A7A93"/>
+    <!-- 鼻子 -->
+    <path d="M 248 220 Q 252 218, 256 220 Q 260 218, 264 220 Q 262 226, 256 228 Q 250 226, 248 220 Z" fill="#4A7A93"/>
+    <!-- 嘴巴 -->
+    <path d="M 256 230 L 256 242"/>
+    <path d="M 256 242 Q 246 250, 240 246"/>
+    <path d="M 256 242 Q 266 250, 272 246"/>
+    <!-- 身体 -->
+    <path d="M 200 260 Q 195 300, 200 340 Q 205 370, 220 380"/>
+    <path d="M 312 260 Q 318 300, 313 340 Q 308 370, 293 380"/>
+    <!-- 肚子 -->
+    <path d="M 220 380 Q 256 392, 293 380"/>
+    <!-- 前腿左 -->
+    <path d="M 225 380 Q 222 410, 225 435"/>
+    <!-- 前腿右 -->
+    <path d="M 288 380 Q 291 410, 288 435"/>
+    <!-- 脚掌左 -->
+    <path d="M 215 432 Q 225 428, 235 432"/>
+    <!-- 脚掌右 -->
+    <path d="M 278 432 Q 288 428, 298 432"/>
+    <!-- 尾巴（翘起） -->
+    <path d="M 313 280 Q 340 265, 350 240 Q 352 230, 345 228"/>
+  </g>
 
-  <!-- 中层卡片 -->
-  <rect x="105" y="120" width="260" height="150" rx="22" fill="url(#card1)" stroke="#5B8FA8" stroke-width="4"/>
-  <rect x="130" y="145" width="120" height="10" rx="5" fill="#5B8FA8"/>
-  <rect x="130" y="165" width="200" height="7" rx="3.5" fill="#D8DFE6"/>
-  <rect x="130" y="181" width="170" height="7" rx="3.5" fill="#D8DFE6"/>
-  <rect x="130" y="207" width="50" height="16" rx="8" fill="#5B8FA8"/>
-
-  <!-- 顶层卡片 -->
-  <rect x="155" y="100" width="260" height="150" rx="22" fill="url(#card1)" stroke="#B8CDE0" stroke-width="4"/>
-  <rect x="180" y="125" width="120" height="10" rx="5" fill="#688996"/>
-  <rect x="180" y="145" width="200" height="7" rx="3.5" fill="#D8DFE6"/>
-  <rect x="180" y="161" width="160" height="7" rx="3.5" fill="#D8DFE6"/>
-  <rect x="180" y="187" width="50" height="16" rx="8" fill="#B8CDE0"/>
+  <!-- 小装饰圆点 -->
+  <circle cx="120" cy="130" r="6" fill="#7B9BAA" opacity="0.4"/>
+  <circle cx="400" cy="140" r="5" fill="#5B8FA8" opacity="0.35"/>
+  <circle cx="410" cy="400" r="7" fill="#B8CDE0" opacity="0.5"/>
+  <circle cx="100" cy="410" r="5" fill="#C5D4DE" opacity="0.5"/>
 
   <!-- qiuer 文字 -->
-  <text x="256" y="400" font-family="Georgia, serif" font-size="58" font-weight="700" fill="#3D4F5C" text-anchor="middle" letter-spacing="2">qiuer</text>
-  <text x="256" y="430" font-family="Courier New, monospace" font-size="16" fill="#8A9AA5" text-anchor="middle" letter-spacing="6">WORKBENCH</text>
+  <text x="256" y="475" font-family="Georgia, serif" font-size="38" font-weight="700" fill="#3D4F5C" text-anchor="middle" letter-spacing="2">qiuer</text>
 </svg>

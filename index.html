@@ -44,6 +44,41 @@ body::before{
 }
 .app{position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:24px 20px 60px}
 
+/* ===== 主菜单卡片 ===== */
+.menu-grid{display:grid; grid-template-columns:repeat(2, 1fr); gap:18px; margin-top:20px}
+.menu-card{
+  background:linear-gradient(135deg, #FFFFFF, #F5F7FA);
+  border:1.5px solid var(--border); border-radius:22px;
+  padding:28px 24px; cursor:pointer; transition:all .25s;
+  position:relative; overflow:hidden;
+  box-shadow:0 4px 16px rgba(123,155,170,.1);
+}
+.menu-card:hover{transform:translateY(-4px); box-shadow:0 14px 32px rgba(123,155,170,.22); border-color:var(--accent)}
+.menu-card::before{
+  content:""; position:absolute; top:-30px; right:-30px; width:120px; height:120px;
+  border-radius:50%; opacity:.18; transition:transform .3s;
+}
+.menu-news::before{background:radial-gradient(circle, var(--accent), transparent 70%)}
+.menu-talent::before{background:radial-gradient(circle, var(--hi2), transparent 70%)}
+.menu-card:hover::before{transform:scale(1.3)}
+.menu-icon{font-size:48px; margin-bottom:14px; line-height:1}
+.menu-title{
+  font-family:var(--serif); font-size:24px; font-weight:700; color:var(--fg);
+  margin-bottom:8px; letter-spacing:1px;
+}
+.menu-desc{font-size:13px; color:var(--fg2); line-height:1.6; margin-bottom:14px}
+.menu-meta{font-size:11px; color:var(--accent2); font-family:var(--mono); letter-spacing:1px}
+
+/* ===== 返回按钮 ===== */
+.back-bar{margin-bottom:14px}
+.btn-back{
+  background:#FFFFFF; border:1.5px solid var(--border2); color:var(--fg);
+  padding:7px 14px; border-radius:18px; cursor:pointer; font-size:12px;
+  font-family:var(--sans); transition:all .2s;
+  box-shadow:0 2px 6px rgba(123,155,170,.08);
+}
+.btn-back:hover{border-color:var(--accent); color:var(--accent2); transform:translateX(-2px)}
+
 /* ===== 头部 ===== */
 header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom:20px}
 .brand{display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap}
@@ -180,11 +215,11 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
 .news-card .summary{font-size:13px; color:var(--fg2); line-height:1.6; margin-bottom:8px}
 .news-card .tags{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
 .news-card .tag{
-  font-size:10px; font-family:var(--mono); letter-spacing:1px;
-  background:#EDF0F3; color:var(--fg); padding:2px 8px; border-radius:10px;
-  text-transform:uppercase;
+  font-size:10px; font-family:var(--mono); letter-spacing:.5px;
+  background:#F5F7FA; color:var(--fg2); padding:3px 9px; border-radius:10px;
+  border:1px solid var(--border);
 }
-.news-card .tag.cat{background:var(--accent); color:#FFFFFF}
+.news-card .tag.cat{background:transparent; color:var(--accent2); border-color:var(--accent); font-weight:600}
 .news-card .src{font-size:11px; color:var(--fg2); font-family:var(--mono)}
 .news-card .fav{
   position:absolute; top:12px; right:14px; cursor:pointer;
@@ -229,6 +264,10 @@ footer .refresh:hover{text-decoration:underline}
 /* 响应式 */
 @media(max-width:680px){
   .brand .meta{display:none}
+  .menu-grid{grid-template-columns:1fr}
+  .menu-card{padding:22px 18px}
+  .menu-icon{font-size:38px}
+  .menu-title{font-size:20px}
   .cal-cell{width:54px}
   .cal-cell .num{font-size:17px}
   .news-card{flex-direction:column; gap:6px}
@@ -254,61 +293,115 @@ footer .refresh:hover{text-decoration:underline}
     </div>
   </header>
 
-  <!-- ===== 工具栏 ===== -->
-  <div class="toolbar">
-    <div class="field" style="flex:2; min-width:180px">
-      <label>关键词搜索</label>
-      <input type="text" id="kwInput" placeholder="搜索标题与摘要…">
-    </div>
-    <div class="field">
-      <label>起始日期</label>
-      <input type="date" id="fromDate">
-    </div>
-    <div class="field">
-      <label>结束日期</label>
-      <input type="date" id="toDate">
-    </div>
-    <div class="field" style="flex:1; min-width:200px">
-      <label>分类筛选</label>
-      <div class="cat-chips" id="catChips"></div>
-    </div>
-    <div class="btns">
-      <button class="btn ghost" id="resetBtn">重置</button>
-      <button class="btn hi" id="searchBtn">查询</button>
-    </div>
-  </div>
-
-  <!-- ===== 视图切换 ===== -->
-  <div class="view-tabs">
-    <button data-view="calendar" class="active">📅 日历视图</button>
-    <button data-view="search">🔎 查询结果</button>
-  </div>
-
-  <!-- ===== 日历视图 ===== -->
-  <section id="calView">
-    <div class="cal-head" style="margin-bottom:12px">
-      <div class="ym"><span class="year" id="calYear"></span><span id="calRange"></span></div>
-      <div class="cal-nav">
-        <button id="prevWeek" title="前两周">‹‹</button>
-        <button id="todayBtn" title="回到今天">今</button>
-        <button id="nextWeek" title="后两周">››</button>
+  <!-- ===== 主页菜单（两个大卡片入口）===== -->
+  <section id="menuView">
+    <div class="menu-grid">
+      <div class="menu-card menu-news" data-target="newsApp">
+        <div class="menu-icon">📰</div>
+        <div class="menu-title">每日新闻</div>
+        <div class="menu-desc">每天10条精选热点新闻，日历视图，随时回顾</div>
+        <div class="menu-meta">每日10条 · 日历展示 · 多维筛选</div>
+      </div>
+      <div class="menu-card menu-talent" data-target="talentApp">
+        <div class="menu-icon">🎓</div>
+        <div class="menu-title">人才工作文章</div>
+        <div class="menu-desc">汇集官方权威发布的人才政策、讲话与实践文章</div>
+        <div class="menu-meta">近三年精选 · 官方来源 · 多维筛选</div>
       </div>
     </div>
-    <div class="cal-strip" id="calStrip"></div>
-
-    <!-- 当日新闻面板 -->
-    <div class="news-panel" id="newsPanel" style="margin-top:24px"></div>
   </section>
 
-  <!-- ===== 查询结果视图 ===== -->
-  <section id="searchView" style="display:none">
-    <div class="result-meta" id="resultMeta"></div>
-    <div class="news-list" id="searchResults"></div>
+  <!-- ===== 每日新闻应用 ===== -->
+  <section id="newsApp" style="display:none">
+    <div class="back-bar">
+      <button class="btn-back" id="backFromNews">← 返回工作台</button>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="field" style="flex:2; min-width:180px">
+        <label>关键词搜索</label>
+        <input type="text" id="kwInput" placeholder="搜索标题与摘要…">
+      </div>
+      <div class="field">
+        <label>起始日期</label>
+        <input type="date" id="fromDate">
+      </div>
+      <div class="field">
+        <label>结束日期</label>
+        <input type="date" id="toDate">
+      </div>
+      <div class="field" style="flex:1; min-width:200px">
+        <label>分类筛选</label>
+        <div class="cat-chips" id="catChips"></div>
+      </div>
+      <div class="btns">
+        <button class="btn ghost" id="resetBtn">重置</button>
+        <button class="btn hi" id="searchBtn">查询</button>
+      </div>
+    </div>
+
+    <!-- 视图切换 -->
+    <div class="view-tabs">
+      <button data-view="calendar" class="active">📅 日历视图</button>
+      <button data-view="search">🔎 查询结果</button>
+    </div>
+
+    <!-- 日历视图 -->
+    <div id="calView">
+      <div class="cal-head" style="margin-bottom:12px">
+        <div class="ym"><span class="year" id="calYear"></span><span id="calRange"></span></div>
+        <div class="cal-nav">
+          <button id="prevWeek" title="前两周">‹‹</button>
+          <button id="todayBtn" title="回到今天">今</button>
+          <button id="nextWeek" title="后两周">››</button>
+        </div>
+      </div>
+      <div class="cal-strip" id="calStrip"></div>
+
+      <!-- 当日新闻面板 -->
+      <div class="news-panel" id="newsPanel" style="margin-top:24px"></div>
+    </div>
+
+    <!-- 查询结果视图 -->
+    <div id="searchView" style="display:none">
+      <div class="result-meta" id="resultMeta"></div>
+      <div class="news-list" id="searchResults"></div>
+    </div>
+  </section>
+
+  <!-- ===== 人才文章应用 ===== -->
+  <section id="talentApp" style="display:none">
+    <div class="back-bar">
+      <button class="btn-back" id="backFromTalent">← 返回工作台</button>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="field" style="flex:2; min-width:180px">
+        <label>关键词搜索</label>
+        <input type="text" id="talentKw" placeholder="搜索人才工作文章…">
+      </div>
+      <div class="field" style="flex:1; min-width:180px">
+        <label>来源类型</label>
+        <div class="cat-chips" id="talentSourceChips"></div>
+      </div>
+      <div class="field" style="flex:1; min-width:180px">
+        <label>主题分类</label>
+        <div class="cat-chips" id="talentTopicChips"></div>
+      </div>
+      <div class="btns">
+        <button class="btn ghost" id="talentReset">重置</button>
+        <button class="btn hi" id="talentSearch">查询</button>
+      </div>
+    </div>
+
+    <div class="result-meta" id="talentResultMeta"></div>
+    <div class="news-list" id="talentResults"></div>
   </section>
 
   <footer>
-    数据存于本地浏览器 · 种子数据截至 2026-07-30 · 尽力联网抓取更新
-    <a class="refresh" id="refreshBtn">↻ 立即刷新今日</a>
+    数据存于本地浏览器 · 每日新闻种子数据截至 2026-07-30 · 人才文章近三年精选
   </footer>
 </div>
 
@@ -754,7 +847,7 @@ function doSearch(){
 ========================================================= */
 function switchView(v){
   state.view = v;
-  document.querySelectorAll('.view-tabs button').forEach(b=>{
+  document.querySelectorAll('#newsApp .view-tabs button').forEach(b=>{
     b.classList.toggle('active', b.dataset.view===v);
   });
   document.getElementById('calView').style.display = v==='calendar'?'block':'none';
@@ -762,10 +855,99 @@ function switchView(v){
 }
 
 /* =========================================================
+   人才工作文章种子数据（近三年精选，来源官方）
+========================================================= */
+const TALENT_ARTICLES = [
+  // ===== 2026年 =====
+  {id:'t1', title:"《求是》杂志发表习近平总书记重要文章《一体推进教育科技人才发展》",
+   summary:"2026年6月15日《求是》发表习近平重要文章，强调增强系统观念，坚持教育优先发展、科技自立自强、人才引领驱动，统筹推进教育科技人才体制机制一体改革，形成推动高质量发展的倍增效应。",
+   source:"新华网", sourceType:"官媒", topic:"讲话精神",
+   publishDate:"2026-06-15", url:"https://news.cri.cn/20260615/89b394a3-444a-41d5-8ab9-100fa1684dad.html"},
+  {id:'t2', title:"以体制机制改革激发人才创新创造活力",
+   summary:"2026年6月16日《求是》文章，深入阐释党的十八大以来习近平总书记关于人才发展体制机制改革的重要论述，围绕'聚天下英才而用之'提出新时代人才工作的总体要求和重点任务。",
+   source:"求是网", sourceType:"官网", topic:"评论解读",
+   publishDate:"2026-06-16", url:"https://www.qstheory.cn/20260615/5fe2c45056144c47b0851ea75946aaf9/c.html"},
+  {id:'t3', title:"聚天下英才 创复兴伟业——人才强国建设为中国式现代化提供有力支撑",
+   summary:"新时代以来，我国深入实施人才强国战略，加快建设国家高水平人才高地，推动创新链、产业链、资金链、人才链深度融合，让各类人才在服务国家发展大局中各得其所、各展其长。",
+   source:"中国政府网", sourceType:"官网", topic:"实践探索",
+   publishDate:"2026-05-15", url:"https://www.gov.cn/yaowen/liebiao/202605/content_7068944.htm"},
+  {id:'t4', title:"瞭望·第一学习｜新时代人才强国战略的战略考量与实践路径",
+   summary:"从'人才优先发展'到'人才引领发展'，从'加快建设人才强国'到'深入实施新时代人才强国战略'，回顾新时代人才工作的战略演变与下一阶段重点部署。",
+   source:"新华网", sourceType:"官媒", topic:"评论解读",
+   publishDate:"2025-04-28", url:"https://www.news.cn/politics/leaders/20250428/53964dd32a594f16b8f82c97587a11e4/c.html"},
+  {id:'t5', title:"支持青年科技人才挑大梁、当主角",
+   summary:"教育、科技、人才是全面建设社会主义现代化国家的基础性、战略性支撑。青年科技人才是我国科技创新发展的生力军，要完善青年科技人才发现、培养、激励机制，让青年人才在重大科技任务中挑大梁、当主角。",
+   source:"人民网·理论", sourceType:"官媒", topic:"实践探索",
+   publishDate:"2025-02-24", url:"http://theory.people.com.cn/n1/2025/0224/c40531-40424234.html"},
+  // ===== 2025年 =====
+  {id:'t6', title:"为高质量发展夯实人才根基",
+   summary:"习近平总书记指出，'要按照发展新质生产力要求，畅通教育、科技、人才的良性循环'。'十五五'时期，需一体推进教育科技人才发展，加快建设世界重要人才中心和创新高地。",
+   source:"人民网·理论", sourceType:"官媒", topic:"讲话精神",
+   publishDate:"2025-11-30", url:"http://theory.people.com.cn/n1/2025/1130/c40531-40614247.html"},
+  {id:'t7', title:"奏响高质量发展的人才强音——'十四五'时期我国人才工作综述",
+   summary:"'十四五'规划即将收官，人才工作如期交出圆满答卷。五年来，人社部门以人力资源开发利用为主线，持续深化人才发展体制机制改革，人才队伍规模、质量、结构同步提升。",
+   source:"人社部·中国就业网", sourceType:"官网", topic:"实践探索",
+   publishDate:"2025-10-21", url:"https://chinajob.mohrss.gov.cn/c/2025-10-21/456506.shtml"},
+  {id:'t8', title:"强化中国式现代化的人才支撑",
+   summary:"始终坚持以习近平总书记关于做好新时代人才工作的重要思想为根本遵循，奋力推动丰富人才资源优势更加彰显，一个又一个创新高地拔节生长。",
+   source:"中国青年网", sourceType:"官媒", topic:"讲话精神",
+   publishDate:"2025-10-18", url:"https://qnzs.youth.cn/tsxq/202510/t20251018_16297603.htm"},
+  {id:'t9', title:"'十五五'人才发展规划：以深化改革推动人才高质量发展",
+   summary:"围绕'十五五'人才发展，专家深入解读如何通过深化人才发展体制机制改革，推动人才高质量发展，加快建设国家战略人才力量，为中国式现代化提供有力人才支撑。",
+   source:"人民论坛网", sourceType:"官媒", topic:"评论解读",
+   publishDate:"2025-09-01", url:"https://paper.people.com.cn/rmlt/pc/content/202509/01/content_30104678.html"},
+  {id:'t10', title:"一体推进教育科技人才发展 加快实现高水平科技自立自强",
+   summary:"党的二十届四中全会对未来5年发展作出顶层设计和战略擘画，对一体推进教育科技人才发展作出专门部署。要认真学习领会习近平总书记系列重要论述，进一步统一思想、凝聚共识。",
+   source:"中国青年网·评论", sourceType:"官媒", topic:"讲话精神",
+   publishDate:"2025-12-26", url:"https://pinglun.youth.cn/ll/202512/t20251226_16430719.htm"},
+  {id:'t11', title:"为建设教育强国、科技强国、人才强国贡献力量",
+   summary:"2025年全国两会期间，代表委员热议习近平总书记关于教育强国、科技强国、人才强国的重要论述，强调必须坚持正确办学方向，培养德智体美劳全面发展的社会主义建设者和接班人。",
+   source:"人民网·两会", sourceType:"官媒", topic:"讲话精神",
+   publishDate:"2025-03-08", url:"http://lianghui.people.com.cn/2025/n1/2025/0308/c460142-40433848.html"},
+  {id:'t12', title:"汇聚高层次人才力量 激发创新创造活力",
+   summary:"2025年全国两会e评：高层次人才工作将持续受到各方关注。我们期待人才评价体系改革取得更大突破，进一步破除'四唯'，让各类人才在创新创造的广阔舞台上各尽其才。",
+   source:"人民网·e评", sourceType:"官媒", topic:"评论解读",
+   publishDate:"2025-03-04", url:"http://lianghui.people.com.cn/2025/n1/2025/0304/c460142-40430129.html"},
+  {id:'t13', title:"以高质量人才工作推进人才强国战略",
+   summary:"党的二十大进一步对深入实施人才强国战略、加快建设人才强国作出战略部署，明确提出'加快建设世界重要人才中心和创新高地，促进人才区域合理布局和协调发展'的战略目标。",
+   source:"云南理论网", sourceType:"官媒", topic:"评论解读",
+   publishDate:"2024-07-26", url:"https://llw.yunnan.cn/system/2024/07/26/033160241.shtml"},
+  // ===== 2024年 =====
+  {id:'t14', title:"中组部、人社部印发《关于进一步做好事业单位公开招聘工作的通知》",
+   summary:"近日，中央组织部、人力资源社会保障部印发《关于进一步做好事业单位公开招聘工作的通知》，对规范事业单位招聘工作、引导人才向基层一线流动等作出部署。",
+   source:"中国青年报·中青在线", sourceType:"官网", topic:"政策文件",
+   publishDate:"2024-09-05", url:"http://m.cyol.com/gb/articles/2024-09/05/content_qbGdB0Fpe6.html"},
+  {id:'t15', title:"九部门印发《加快数字人才培育支撑数字经济发展行动方案》",
+   summary:"人社部、中组部、中央网信办、国家发改委等9部门联合印发行动方案，发挥数字人才支撑数字经济的基础性作用，加快推动形成新质生产力，为高质量发展提供人才支撑。",
+   source:"工人日报", sourceType:"官媒", topic:"政策文件",
+   publishDate:"2024-04-17", url:"https://www.workercn.cn/c/2024-04-18/8225652.shtml"},
+  {id:'t16', title:"为全面推进强国建设、民族复兴伟业提供有力人才支撑",
+   summary:"习近平总书记关于做好新时代人才工作的重要思想，是习近平新时代中国特色社会主义思想的重要组成部分，是我们党对人才事业发展规律认识的最新成果，为新时代人才工作提供了根本遵循。",
+   source:"求是网", sourceType:"官网", topic:"讲话精神",
+   publishDate:"2024-05-17", url:"https://www.qstheory.cn/qshyjx/2024-05/17/c_1130146996.htm"},
+  {id:'t17', title:"做好新时代人才工作的根本遵循和行动指南",
+   summary:"党的十八大以来，习近平总书记围绕人才工作发表的一系列重要论述，立意高远、内涵丰富、思想深刻，是我们党对人才事业发展规律认识的最新成果，是新时代人才工作的根本遵循和行动指南。",
+   source:"求是网", sourceType:"官网", topic:"讲话精神",
+   publishDate:"2024-06-13", url:"https://www.qstheory.cn/qshyjx/2024-06/13/c_1130162350.htm"}
+];
+
+const TALENT_SOURCES = ["官网","官媒","公众号"];
+const TALENT_TOPICS = ["政策文件","讲话精神","实践探索","评论解读"];
+
+/* =========================================================
    事件绑定
 ========================================================= */
 function bindEvents(){
-  document.querySelectorAll('.view-tabs button').forEach(b=>{
+  // 菜单卡片点击
+  document.querySelectorAll('.menu-card').forEach(c=>{
+    c.onclick = ()=> showApp(c.dataset.target);
+  });
+  // 返回按钮
+  document.getElementById('backFromNews').onclick = ()=> showApp('menu');
+  document.getElementById('backFromTalent').onclick = ()=> showApp('menu');
+
+  // 视图切换（newsApp内）
+  document.querySelectorAll('#newsApp .view-tabs button').forEach(b=>{
     b.onclick = ()=>{
       if(b.dataset.view==='search' && !document.getElementById('searchResults').children.length){
         doSearch();
@@ -804,26 +986,117 @@ function bindEvents(){
     toast('已重置查询条件');
   };
 
-  document.getElementById('refreshBtn').onclick = async ()=>{
-    toast('正在联网抓取今日新闻…');
-    const ok = await tryFetchToday();
-    if(ok){
-      toast('今日新闻已更新');
-      if(state.selectedDate===todayStr() || !state.selectedDate){
-        state.selectedDate = todayStr();
-        renderCalendar();
-        renderNewsPanel(state.selectedDate);
-      }
-    } else {
-      toast('未能联网更新，使用现有数据');
-    }
+  // 人才文章按钮
+  document.getElementById('talentSearch').onclick = doTalentSearch;
+  document.getElementById('talentKw').addEventListener('keydown', e=>{
+    if(e.key==='Enter') doTalentSearch();
+  });
+  document.getElementById('talentReset').onclick = ()=>{
+    document.getElementById('talentKw').value='';
+    state.talentSources.clear();
+    state.talentTopics.clear();
+    document.querySelectorAll('#talentSourceChips .chip').forEach(c=>c.classList.remove('on'));
+    document.querySelectorAll('#talentTopicChips .chip').forEach(c=>c.classList.remove('on'));
+    doTalentSearch();
+    toast('已重置');
   };
+}
+
+/* =========================================================
+   顶级导航：menu / news / talent
+========================================================= */
+function showApp(name){
+  const map = {menu:'menuView', news:'newsApp', talent:'talentApp'};
+  const target = map[name];
+  ['menuView','newsApp','talentApp'].forEach(id=>{
+    document.getElementById(id).style.display = (id===target) ? 'block' : 'none';
+  });
+  if(name==='talent'){
+    setTimeout(()=>{ renderTalentChips(); doTalentSearch(); },30);
+  }
+  if(name==='news'){
+    setTimeout(()=>switchView('calendar'), 30);
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+/* =========================================================
+   人才文章筛选与渲染
+========================================================= */
+function renderTalentChips(){
+  const renderInto = (id, list)=>{
+    const box = document.getElementById(id); box.innerHTML='';
+    list.forEach(c=>{
+      const el = document.createElement('span');
+      el.className = 'chip'; el.textContent = c;
+      el.onclick = ()=>{
+        const set = id.includes('Source') ? state.talentSources : state.talentTopics;
+        if(set.has(c)) set.delete(c); else set.add(c);
+        el.classList.toggle('on');
+      };
+      box.appendChild(el);
+    });
+  };
+  renderInto('talentSourceChips', TALENT_SOURCES);
+  renderInto('talentTopicChips', TALENT_TOPICS);
+}
+
+function doTalentSearch(){
+  const kw = document.getElementById('talentKw').value.trim().toLowerCase();
+  const sources = state.talentSources;
+  const topics = state.talentTopics;
+  let results = TALENT_ARTICLES.slice();
+  if(kw){
+    results = results.filter(a=>{
+      const hay = (a.title+' '+a.summary+' '+a.source).toLowerCase();
+      return hay.includes(kw);
+    });
+  }
+  if(sources.size>0) results = results.filter(a=>sources.has(a.sourceType));
+  if(topics.size>0) results = results.filter(a=>topics.has(a.topic));
+  results.sort((a,b)=> a.publishDate < b.publishDate ? 1 : -1);
+
+  const meta = document.getElementById('talentResultMeta');
+  meta.innerHTML = `查询到 <b>${results.length}</b> 篇文章 · 来源「${sources.size?[...sources].join('/'):'全部'}」 · 主题「${topics.size?[...topics].join('/'):'全部'}」`;
+
+  const list = document.getElementById('talentResults');
+  if(results.length===0){
+    list.innerHTML = `<div class="empty"><div class="icon">🔍</div>未找到匹配的文章<br><span style="font-size:12px">换个关键词试试？</span></div>`;
+    return;
+  }
+  list.innerHTML = results.map(a=>{
+    const isRead = state.read[a.id] ? 'read' : '';
+    return `<div class="news-card ${isRead}" data-id="${a.id}">
+      <div class="rank">📄</div>
+      <div class="body">
+        <div class="title"><a href="${a.url}" target="_blank" rel="noopener">${a.title}</a></div>
+        <div class="summary">${a.summary}</div>
+        <div class="tags">
+          <span class="tag cat">${a.topic}</span>
+          <span class="tag src">${a.source}</span>
+          <span class="tag">${a.publishDate}</span>
+          <span class="tag" style="background:var(--accent);color:#FFFFFF;border-color:var(--accent2)">${a.sourceType}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  list.querySelectorAll('.news-card .title a').forEach(a=>{
+    a.onclick = ()=>{
+      const card = a.closest('.news-card');
+      const id = card.dataset.id;
+      state.read[id] = true; saveData();
+      card.classList.add('read');
+    };
+  });
 }
 
 /* =========================================================
    初始化
 ========================================================= */
 async function init(){
+  state.talentSources = new Set();
+  state.talentTopics = new Set();
   loadData();
   renderHeader();
   renderCatChips();
@@ -831,18 +1104,8 @@ async function init(){
   state.selectedDate = todayStr();
   renderNewsPanel(state.selectedDate);
   bindEvents();
-
   // 默认查询结果区也填一份
   doSearch();
-  switchView('calendar');
-
-  // 后台静默尝试抓取今天
-  tryFetchToday().then(ok=>{
-    if(ok && state.selectedDate===todayStr()){
-      renderCalendar();
-      renderNewsPanel(state.selectedDate);
-    }
-  });
 }
 
 init();
