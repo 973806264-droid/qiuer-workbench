@@ -3,26 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>qiuer的新闻工作台 · Daily News Workbench</title>
+<title>qiuer的工作台 · Daily News Workbench</title>
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="qiuer新闻">
+<meta name="apple-mobile-web-app-title" content="qiuer工作台">
 <style>
 :root{
-  /* 糖果淡彩 - 参考莫兰迪配色卡，极淡极透 */
-  --bg:#FFF8F0;        /* 极浅暖米白 主背景 */
-  --bg2:#FAF1E4;       /* 略深奶米 次背景 */
+  /* 科技蓝莫兰迪 - 低饱和灰蓝调，冷静专业 */
+  --bg:#EDF0F3;        /* 极浅灰蓝 主背景 */
+  --bg2:#E0E5EA;       /* 略深灰蓝 次背景 */
   --card:#FFFFFF;      /* 纯白 卡片 */
-  --card2:#FEFBF6;     /* 浅奶白 */
-  --accent:#B8E6D3;    /* 薄荷绿 强调色 */
-  --accent2:#9FD9C2;   /* 深一点薄荷绿 */
-  --fg:#5A4A6E;        /* 温柔深紫 主文字 */
-  --fg2:#A89DB5;       /* 浅紫灰 次文字 */
-  --hi:#FFB5A7;        /* 珊瑚粉 高亮 */
-  --hi2:#FF9B8A;       /* 深珊瑚粉 */
-  --border:#F0E8DC;    /* 浅奶米边框 */
-  --border2:#E8DDC9;   /* 略深奶米边框 */
+  --card2:#F5F7FA;     /* 浅灰蓝白 */
+  --accent:#7B9BAA;    /* 灰蓝 强调色 */
+  --accent2:#688996;   /* 深灰蓝 */
+  --fg:#3D4F5C;        /* 深蓝灰 主文字 */
+  --fg2:#8A9AA5;       /* 浅蓝灰 次文字 */
+  --hi:#5B8FA8;        /* 科技蓝 高亮 */
+  --hi2:#4A7A93;       /* 深科技蓝 */
+  --border:#D8DFE6;    /* 浅蓝灰边框 */
+  --border2:#C5CFD8;   /* 略深蓝灰边框 */
   --serif:'Georgia','Noto Serif SC','Songti SC','SimSun',serif;
   --mono:'Courier New','Menlo',monospace;
   --sans:'Helvetica Neue','PingFang SC','Microsoft YaHei',sans-serif;
@@ -31,7 +31,7 @@
 html,body{height:100%}
 body{
   background:
-    radial-gradient(ellipse at top, #FFFDF8 0%, var(--bg) 60%, #FBF3E8 100%);
+    radial-gradient(ellipse at top, #F4F6F9 0%, var(--bg) 60%, #E5EAEF 100%);
   color:var(--fg); font-family:var(--sans); min-height:100vh;
   padding:0;
 }
@@ -39,8 +39,8 @@ body{
 body::before{
   content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
   background-image:
-    repeating-linear-gradient(0deg, rgba(184,230,211,.025) 0 1px, transparent 1px 3px),
-    repeating-linear-gradient(90deg, rgba(255,181,167,.022) 0 1px, transparent 1px 3px);
+    repeating-linear-gradient(0deg, rgba(123,155,170,.022) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, rgba(91,143,168,.02) 0 1px, transparent 1px 3px);
 }
 .app{position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:24px 20px 60px}
 
@@ -57,7 +57,7 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
 
 /* ===== 工具栏 ===== */
 .toolbar{
-  background:linear-gradient(180deg, rgba(255,255,255,.7), rgba(254,251,246,.5));
+  background:linear-gradient(180deg, rgba(255,255,255,.7), rgba(245,247,250,.5));
   border:1px solid var(--border); border-radius:14px;
   padding:14px; margin-bottom:22px;
   display:flex; gap:12px; flex-wrap:wrap; align-items:center;
@@ -65,32 +65,32 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
 .field{display:flex; flex-direction:column; gap:4px}
 .field label{font-size:10px; color:var(--fg2); font-family:var(--mono); letter-spacing:1px; text-transform:uppercase}
 .field input[type=text], .field input[type=date], .field select{
-  background:#FFFEFB; border:1px solid var(--border2); border-radius:8px;
+  background:#FBFCFD; border:1px solid var(--border2); border-radius:8px;
   color:var(--fg); padding:8px 10px; font-size:13px; font-family:var(--sans);
   outline:none; transition:border-color .15s, box-shadow .15s;
 }
-.field input:focus, .field select:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(184,230,211,.4)}
+.field input:focus, .field select:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(123,155,170,.35)}
 .field input[type=date]{color-scheme:light}
 .cat-select{min-width:140px}
 .btns{display:flex; gap:8px; margin-left:auto; flex-wrap:wrap}
 .btn{
-  background:var(--accent); color:#5A4A6E; border:1px solid var(--accent2);
+  background:var(--accent); color:#FFFFFF; border:1px solid var(--accent2);
   border-radius:8px; padding:8px 14px; font-size:13px; cursor:pointer;
   font-family:var(--sans); transition:background .15s, transform .05s;
 }
 .btn:hover{background:var(--accent2)}
 .btn:active{transform:translateY(1px)}
 .btn.ghost{background:transparent; color:var(--fg); border-color:var(--border2)}
-.btn.ghost:hover{background:rgba(184,230,211,.2)}
+.btn.ghost:hover{background:rgba(123,155,170,.18)}
 .btn.hi{background:var(--hi2); border-color:var(--hi2); color:#FFFFFF}
 .btn.hi:hover{background:var(--hi)}
 .cat-chips{display:flex; gap:6px; flex-wrap:wrap}
 .chip{
   font-size:11px; padding:4px 10px; border-radius:14px; cursor:pointer;
-  background:#FFFEFB; border:1px solid var(--border2); color:var(--fg2);
+  background:#FBFCFD; border:1px solid var(--border2); color:var(--fg2);
   user-select:none; transition:all .15s; font-family:var(--mono);
 }
-.chip.on{background:var(--accent); color:#5A4A6E; border-color:var(--accent2)}
+.chip.on{background:var(--accent); color:#FFFFFF; border-color:var(--accent2)}
 
 /* ===== 视图切换 ===== */
 .view-tabs{display:flex; gap:0; margin-bottom:18px; border-bottom:2px solid var(--border2)}
@@ -108,7 +108,7 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
   scroll-behavior:smooth;
 }
 .cal-strip::-webkit-scrollbar{height:5px}
-.cal-strip::-webkit-scrollbar-track{background:#FBF3E8; border-radius:3px}
+.cal-strip::-webkit-scrollbar-track{background:#E5EAEF; border-radius:3px}
 .cal-strip::-webkit-scrollbar-thumb{background:var(--accent); border-radius:3px}
 .cal-cell{
   flex:0 0 auto; width:64px; padding:8px 6px; border-radius:12px; cursor:pointer;
@@ -116,20 +116,20 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
   position:relative; transition:all .15s;
   display:flex; flex-direction:column; align-items:center; gap:3px;
 }
-.cal-cell:hover{border-color:var(--accent); background:linear-gradient(180deg, #FFFDF8, #F0FAF5)}
+.cal-cell:hover{border-color:var(--accent); background:linear-gradient(180deg, #FCFDFE, #EBF2F6)}
 .cal-cell .dow{font-size:10px; font-family:var(--mono); color:var(--fg2); letter-spacing:1px}
 .cal-cell .num{font-family:var(--serif); font-size:20px; font-weight:700; color:var(--fg); line-height:1}
 .cal-cell .cnt{
-  font-size:9px; font-family:var(--mono); color:#5A4A6E;
+  font-size:9px; font-family:var(--mono); color:#FFFFFF;
   background:var(--accent); padding:1px 6px; border-radius:8px; margin-top:1px;
 }
 .cal-cell.today{
   border-color:var(--hi2);
-  background:linear-gradient(180deg, #FFE9E2, #FFD9CF);
+  background:linear-gradient(180deg, #DDEAF1, #C9DCE8);
 }
 .cal-cell.today .num{color:var(--hi2)}
 .cal-cell.today .dow{color:var(--hi2)}
-.cal-cell.selected{box-shadow:0 0 0 2px var(--accent2) inset; border-color:var(--accent2)}
+.cal-cell.selected{box-shadow:0 0 0 2px var(--hi) inset; border-color:var(--hi)}
 .cal-cell.has-news .num::after{
   content:""; position:absolute; top:7px; right:7px; width:5px; height:5px;
   border-radius:50%; background:var(--hi2);
@@ -150,7 +150,7 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
   padding:14px 16px; display:flex; gap:14px; position:relative;
   transition:transform .1s, box-shadow .15s; color:var(--fg);
 }
-.news-card:hover{transform:translateY(-1px); box-shadow:0 8px 22px rgba(184,230,211,.35); border-color:var(--accent)}
+.news-card:hover{transform:translateY(-1px); box-shadow:0 8px 22px rgba(123,155,170,.3); border-color:var(--accent)}
 .news-card .rank{
   font-family:var(--serif); font-size:28px; font-weight:700;
   background:linear-gradient(135deg, var(--hi), var(--hi2));
@@ -168,14 +168,14 @@ header{border-bottom:2px solid var(--border); padding-bottom:18px; margin-bottom
 .news-card .tags{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
 .news-card .tag{
   font-size:10px; font-family:var(--mono); letter-spacing:1px;
-  background:#FAF1E4; color:var(--fg); padding:2px 8px; border-radius:10px;
+  background:#EDF0F3; color:var(--fg); padding:2px 8px; border-radius:10px;
   text-transform:uppercase;
 }
-.news-card .tag.cat{background:var(--accent); color:#5A4A6E}
+.news-card .tag.cat{background:var(--accent); color:#FFFFFF}
 .news-card .src{font-size:11px; color:var(--fg2); font-family:var(--mono)}
 .news-card .fav{
   position:absolute; top:12px; right:14px; cursor:pointer;
-  font-size:18px; color:rgba(90,74,110,.2); background:none; border:none;
+  font-size:18px; color:rgba(61,79,92,.2); background:none; border:none;
   transition:color .15s, transform .15s; line-height:1;
 }
 .news-card .fav:hover{color:var(--hi); transform:scale(1.15)}
@@ -206,9 +206,9 @@ footer .refresh:hover{text-decoration:underline}
 /* 加载提示 */
 .toast{
   position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-  background:#FFFFFF; border:1px solid var(--hi2); color:var(--fg);
+  background:#FFFFFF; border:1px solid var(--accent2); color:var(--fg);
   padding:10px 18px; border-radius:10px; font-size:13px; z-index:100;
-  box-shadow:0 6px 18px rgba(255,181,167,.3); opacity:0; transition:opacity .25s, transform .25s;
+  box-shadow:0 6px 18px rgba(123,155,170,.3); opacity:0; transition:opacity .25s, transform .25s;
   pointer-events:none;
 }
 .toast.show{opacity:1; transform:translateX(-50%) translateY(-4px)}
@@ -231,8 +231,8 @@ footer .refresh:hover{text-decoration:underline}
   <header>
     <div class="brand">
       <div>
-        <h1>qiuer的新闻工作台</h1>
-        <div class="en">QIUER'S DAILY NEWS · WORKBENCH</div>
+        <h1>qiuer的工作台</h1>
+        <div class="en">QIUER'S WORKBENCH · DAILY NEWS</div>
       </div>
       <div class="meta">
         <div id="todayLabel">—</div>
@@ -348,20 +348,20 @@ const SEED = {
 /* =========================================================
    分类配置
 ========================================================= */
-const CAT_TEXT_COLORS = {
-  "时政":"#7A5A8E","国际":"#3E5A7E","财经":"#3E7A5E","科技":"#3E7A7E",
-  "社会":"#9E5A5E","体育":"#7E3E7A","娱乐":"#9E3E5E","其他":"#7E7A5E"
-};
 const CATEGORIES = ["时政","国际","财经","科技","社会","体育","娱乐","其他"];
 const CAT_COLORS = {
-  "时政":"#E1D4E8",   /* 浅奶紫 */
-  "国际":"#C1DAE7",   /* 浅天蓝 */
-  "财经":"#D7E7D7",   /* 薄荷绿 */
-  "科技":"#D4F0EE",   /* 浅青 */
-  "社会":"#FFE3DF",   /* 浅珊瑚 */
-  "体育":"#EADDE5",   /* 浅粉紫 */
-  "娱乐":"#F5C6C3",   /* 蜜桃粉 */
-  "其他":"#EFEDDF"    /* 浅米黄 */
+  "时政":"#C5D4DE",   /* 浅灰蓝 */
+  "国际":"#B8C9D6",   /* 深一点灰蓝 */
+  "财经":"#C5D8D2",   /* 灰青绿 */
+  "科技":"#B8CDE0",   /* 科技蓝 */
+  "社会":"#D4CFC8",   /* 暖灰 */
+  "体育":"#C8D4C5",   /* 灰绿 */
+  "娱乐":"#D0C8D4",   /* 灰紫蓝 */
+  "其他":"#CCD2D8"    /* 中性灰蓝 */
+};
+const CAT_TEXT_COLORS = {
+  "时政":"#3D5A6E","国际":"#345060","财经":"#3D5E55","科技":"#34506E",
+  "社会":"#5E554A","体育":"#3E5A3E","娱乐":"#554A60","其他":"#4A5560"
 };
 
 /* =========================================================
@@ -561,7 +561,7 @@ function renderCalendar(){
       const cats=new Set(news.map(n=>n.category));
       [...cats].slice(0,3).forEach(c=>{
         const dot=document.createElement('span'); dot.className='dot';
-        dot.style.background=CAT_COLORS[c]||'#8A9A8D';
+        dot.style.background=CAT_COLORS[c]||'#8A9AA5';
         dots.appendChild(dot);
       });
       el.appendChild(dots);
@@ -624,8 +624,8 @@ function renderNewsPanel(dateStr){
     const id = n.id || uid(dateStr, n.rank);
     const isFav = state.fav[id] ? 'on' : '';
     const isRead = state.read[id] ? 'read' : '';
-    const catColor = CAT_COLORS[n.category] || '#EFEDDF';
-    const catTxt = CAT_TEXT_COLORS[n.category] || '#7E7A5E';
+    const catColor = CAT_COLORS[n.category] || '#CCD2D8';
+    const catTxt = CAT_TEXT_COLORS[n.category] || '#4A5560';
     html += `<div class="news-card ${isRead}" data-id="${id}">
       <div class="rank">${n.rank}</div>
       <div class="body">
@@ -701,8 +701,8 @@ function doSearch(){
     const id = n.id || uid(n.date, n.rank);
     const isFav = state.fav[id] ? 'on' : '';
     const isRead = state.read[id] ? 'read' : '';
-    const catColor = CAT_COLORS[n.category] || '#EFEDDF';
-    const catTxt = CAT_TEXT_COLORS[n.category] || '#7E7A5E';
+    const catColor = CAT_COLORS[n.category] || '#CCD2D8';
+    const catTxt = CAT_TEXT_COLORS[n.category] || '#4A5560';
     const [y,mm,dd] = n.date.split('-');
     return `<div class="news-card ${isRead}" data-id="${id}">
       <div class="rank">${n.rank}</div>
